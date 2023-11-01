@@ -2,6 +2,8 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 
+
+
 df = pd.read_csv("rsa_cases_vs_levels.csv")
 epiweek = df.iloc[-1, 8]
 no_cases = df.iloc[-1, 1]
@@ -31,6 +33,6 @@ def bar_chart(df):
 
     fig.update_xaxes(title_text="Epidemiological week")
     fig.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False)
-    fig.update_yaxes(title_text="Log Genome Copies/ml (N Gene)", secondary_y=True)
+    fig.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True)
 
     return fig
