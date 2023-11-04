@@ -1,10 +1,10 @@
 import dash
-from dash import html, dcc, Input, Output
+from dash import html, dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
 import plotly_express as px
 import pandas as pd
 
-app = dash.Dash(external_stylesheets=[dbc.themes.MINTY]) #dbc allows you to customise style
+dash.register_page(__name__)
 
 df = pd.read_csv("provincial_cases_vs_levels.csv")
 
@@ -26,7 +26,8 @@ dropdown = dcc.Dropdown(
            multi=False,
            style={"width": "50%"}
          )
-app.layout = html.Div([
+
+layout = html.Div([
     html.Div([
         html.Label(["SARS-CoV-2 Wastewater Levels"]),
         dropdown
@@ -38,7 +39,7 @@ app.layout = html.Div([
 
 ])
 
-@app.callback(
+@callback(
     Output("the_graph", "figure"),
     [Input("my_dropdown", "value")]
 )
@@ -60,10 +61,3 @@ def line_chart(my_dropdown):
 
 
     return fig
-
-
-
-if __name__ == "__main__":
-    app.run_server()
-
-
