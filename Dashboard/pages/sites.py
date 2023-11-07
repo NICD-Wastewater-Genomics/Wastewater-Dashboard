@@ -63,50 +63,52 @@ layout = html.Div([
     Output("map_plot", "figure"),
     Input("my_dropdown", "value"))
 def make_map(my_dropdown):
-    fig20 = px.choropleth(dfg,
+
+    sites_selected = sites[sites['Metro']==my_dropdown]
+    sites_other = sites[sites['Metro']!=my_dropdown]
+    dfg0 = dfg.copy()
+    dfg0.loc[dfg0['province'].isin(sites_selected['Province']),'val0'] = 14
+    fig_map = px.choropleth(dfg0,
                         geojson=gjson,   
                         featureidkey="properties.PROVINCE", 
                         locations = "province",
-                        color="val0",color_continuous_scale='YlOrBr',
+                        color="val0",color_continuous_scale='YlGn',
                         color_continuous_midpoint=0,
-                        range_color=(-5, 20),
+                        range_color=(-2, 20),
                         hover_name="province",
                         hover_data={"province":False,'val0':False}
                         )
-    fig20.update_traces(showlegend=False)
+    fig_map.update_traces(showlegend=False)
 
-    fig20.update_geos(fitbounds="locations", visible=False)
-    fig20.update_layout(margin={"r":0,"t":0,"l":0,"b":0},xaxis={'fixedrange':True},yaxis={'fixedrange':True},dragmode=False)
+    fig_map.update_geos(fitbounds="locations", visible=False)
+    fig_map.update_layout(margin={"r":0,"t":0,"l":0,"b":0},xaxis={'fixedrange':True},yaxis={'fixedrange':True},dragmode=False)
 
-    sites2 = sites[sites['Metro']==my_dropdown]
-    sites0 = sites[sites['Metro']!=my_dropdown]
-
-    fig2 = px.scatter_geo(sites2,
-                lat=sites2['Latitude'],
-                lon=sites2['Longitude'],
+    fig_selected = px.scatter_geo(sites_selected,
+                lat=sites_selected['Latitude'],
+                lon=sites_selected['Longitude'],
                 hover_name="Site",
                 hover_data={'Site':False,'Latitude':False,"Longitude":False},
                 )
-    fig2.update_traces(marker=dict(size=6,line=dict(width=2,
+    fig_selected.update_traces(marker=dict(size=6,line=dict(width=2,
                       color='red')),
                      selector=dict(mode='markers'))
-    fig0 = px.scatter_geo(sites0,
-            lat=sites0['Latitude'],
-            lon=sites0['Longitude'],
+    fig_other = px.scatter_geo(sites_other,
+            lat=sites_other['Latitude'],
+            lon=sites_other['Longitude'],
             hover_name="Site",
             hover_data={'Site':False,'Latitude':False,"Longitude":False},
             )
-    fig0.update_traces(marker=dict(size=6,line=dict(width=2,
+    fig_other.update_traces(marker=dict(size=6,line=dict(width=2,
                       color='black')),
                      selector=dict(mode='markers'))
-    fig20.add_trace(
-    fig2.data[0]
+    fig_map.add_trace(
+    fig_selected.data[0]
     )
-    fig20.add_trace(
-    fig0.data[0]
+    fig_map.add_trace(
+    fig_other.data[0]
     )
-    fig20.update(layout_coloraxis_showscale=False)
-    return fig20
+    fig_map.update(layout_coloraxis_showscale=False)
+    return fig_map
 
 
 @callback(
