@@ -4,7 +4,7 @@ import pandas as pd
 
 
 
-df = pd.read_csv("rsa_cases_vs_levels.csv")
+df = pd.read_csv("data/rsa_cases_vs_levels.csv")
 epiweek = df.iloc[-1, 8]
 no_cases = df.iloc[-1, 1]
 end_week = df.iloc[-1, -1]
