@@ -42,4 +42,4 @@ app.layout = dcc.Loading(  # <- Wrap App with Loading Component
 #     ], fluid=True)  # fills up empty space with the graphs
 
 if __name__ == "__main__":
-    app.run_server()
+    app.run_server(debug=True)
