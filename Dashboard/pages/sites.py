@@ -36,7 +36,7 @@ dropdown = dcc.Dropdown(
                {'label': "Ekurhuleni - Gauteng", "value": "Ekurhuleni MM"},
                {'label': "Johannesburg - Gauteng", "value": "Johannesburg MM"},
                {'label': "Tshwane - Gauteng", "value": "Tshwane MM"},
-               {'label': "Ethekwini MM - KwaZulu Natal", "value": "Ethekwini MM"},
+               {'label': "Ethekwini - KwaZulu Natal", "value": "Ethekwini MM"},
                {'label': "Cape Town - Western Cape", "value": "Cape Town MM"}
                     ],
            value= "Johannesburg MM",
