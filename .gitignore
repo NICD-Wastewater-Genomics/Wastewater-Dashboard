@@ -8,3 +8,4 @@ Dashboard/.idea/vcs.xml
 Dashboard/.idea/inspectionProfiles/profiles_settings.xml
 Dashboard/pages/__pycache__/home.cpython-39.pyc
 Dashboard/pages/__pycache__/sites.cpython-39.pyc
+*.pyc
