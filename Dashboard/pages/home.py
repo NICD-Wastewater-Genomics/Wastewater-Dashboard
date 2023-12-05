@@ -2,7 +2,7 @@ import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
 from cards import card_content1, card_content2, card_content3
-from charts import df, bar_chart
+from charts import df, bar_chart, seq_df, seq_plot, colorDict
 
 dash.register_page(__name__, path='/')
 
@@ -18,6 +18,9 @@ layout = dbc.Container([
         dbc.Col(dbc.Card(card_content3, color="primary", inverse=True))
         ]),
     dbc.Row([
-        dbc.Col([dcc.Graph(id="bar_plot", figure=bar_chart(df))])
+        dcc.Graph(id="bar_plot", figure=bar_chart(df))
         ]),
-    ], fluid=True)  # fills up empty space with the graphs
+    dbc.Row([
+    dcc.Graph(id="seq_plot", figure=seq_plot(seq_df, colorDict))
+     ]),
+    ])#, fluid=True)  # fills up empty space with the graphs
