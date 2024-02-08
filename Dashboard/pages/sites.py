@@ -2,6 +2,8 @@ import dash
 from dash import html, dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
 import plotly_express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 import pandas as pd
 import json
 dash.register_page(__name__)
@@ -116,18 +118,75 @@ def make_map(my_dropdown):
     [Input("my_dropdown", "value")]
 )
 def line_chart(my_dropdown):
-    dff = df[(df["District_Name"] == my_dropdown)]
-    # print(dff)
-    fig = px.line(dff, x="Date", y="loglevels", color="Site_Name")
+    dff = df[(df["District"] == my_dropdown)]
+    fig3 = make_subplots(specs=[[{"secondary_y": True}]])
 
-    fig.update_layout(
+    fig3.add_trace(
+        go.Bar(
+            x=dff['Date'], y=dff['n'],
+            marker_color='gray',
+            name="Clinical Cases"),
+        secondary_y=False)  # specify for colour for df
+    # color mapping
+    color_mapping = {'Zandvleit Wastewater Treatment Works': 'blue',
+                     'Borcheds Quarry Wastewater Treatment Works': 'red',
+                     'East Bank Wastewater Treatment Works': 'blue',
+                     'Mdantsane Wastewater Treatment Works': 'red',
+                     'ERWAT Vlakplaat Wastewater Treatment Work': 'blue',
+                     'Hartebeesfontein Waterworks': 'red',
+                     'Northern Wastewater Treatment Works (KZN)': 'blue',
+                     'Central Wastewater Treatment Works (KZN)': 'red',
+                     'Northern Wastewater Treatment Works (GP)': 'blue',
+                     'Goudkoppies Wastewater Treatment Works': 'red',
+                     'Sterkwater Wastewater Treatment Works': 'blue',
+                     'Bloemspruit Wastewater Treatment Works': 'red',
+                     'Brickfield Pre-treatment Works': 'blue',
+                     'Kwanobuhle Wastewater Treatment Works': 'red',
+                     'Rooiwal Wastewater Treatment Works': 'blue',
+                     'Daspoort Wastewater Treatment Works': 'red'}
+
+    # Map 'Site' values to colors using the color_mapping dictionary
+    dff['color'] = dff['Site'].map(color_mapping)
+
+    fig3.add_trace(
+        go.Scatter(
+            x=dff['Date'], y=dff['levels'],
+            marker=dict(color=dff['color'], size=8),
+            line=dict(width=4),
+            text=dff['levels'],
+            name="Wastewater levels"), secondary_y=True)
+
+
+    fig3.update_layout(
         title=' South African SARS-CoV-2 Wastewater Levels',
-        barmode='group',
-        xaxis=dict(dtick="M1",tickformat="%b\n%Y")
-    )
+        barmode='group')
 
-    fig.update_xaxes(title_text="Epidemiological week")
-    fig.update_yaxes(title_text="Log Genome Copies/ml (N Gene)", secondary_y=False)
+    fig3.update_layout(legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+    margin=dict(l=20, r=20, t=20, b=20))
+    fig3.update_xaxes(title_text="Epidemiological week")
+    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False)
+    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True)
+    fig3.update_layout(width=800)
 
+    return fig3
 
-    return fig
+# print(dff)
+# fig = px.line(dff, x="epiweek2", y="levels", color="Site")
+# fig.add_bar(dff, x="Date", y="n")
+# #fig.update_layout(
+#     title=' South African SARS-CoV-2 Wastewater Levels',
+#     barmode='group',
+#     xaxis=dict(dtick="M1",tickformat="%b\n%Y")
+# )
+#fig.add_bar(dff, x="Date", y="n")
+# fig.update_xaxes(title_text="Epidemiological week")
+# fig.update_yaxes(title_text="Log Genome Copies/ml (N Gene)", secondary_y=False)
+#
+#
+# return fig
