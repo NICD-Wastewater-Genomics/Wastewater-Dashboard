@@ -18,9 +18,9 @@ layout = dbc.Container([
         dbc.Col(dbc.Card(card_content3, color="primary", inverse=True))
         ]),
     dbc.Row([
-        dcc.Graph(id="bar_plot", figure=bar_chart(df))
+        dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
         ]),
     dbc.Row([
-    dcc.Graph(id="seq_plot", figure=seq_plot(seq_df, colorDict))
+    dcc.Graph(id="seq_plot", figure=seq_plot(seq_df, colorDict), config={'displayModeBar': False})
      ]),
     ])#, fluid=True)  # fills up empty space with the graphs

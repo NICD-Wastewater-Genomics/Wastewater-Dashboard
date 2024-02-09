@@ -51,12 +51,12 @@ layout = html.Div([
     html.Div([
         html.Label(["SARS-CoV-2 Wastewater Levels"]),
         dropdown,
-        dcc.Graph(id='map_plot')
+        dcc.Graph(id='map_plot',config={'displayModeBar': False})
     ]),
     
 
     html.Div([
-        dcc.Graph(id="the_graph")
+        dcc.Graph(id="the_graph",config={'displayModeBar': False})
     ]),
 
 ])
@@ -151,10 +151,11 @@ def line_chart(my_dropdown):
     fig3.add_trace(
         go.Scatter(
             x=dff['Date'], y=dff['levels'],
+            mode='markers',
             marker=dict(color=dff['color'], size=8),
             line=dict(width=4),
-            text=dff['levels'],
-            name="Wastewater levels"), secondary_y=True)
+            text=dff['Site'],
+            name="Wastewater Level"), secondary_y=True)
 
 
     fig3.update_layout(
@@ -166,13 +167,13 @@ def line_chart(my_dropdown):
         yanchor="bottom",
         y=1.02,
         xanchor="right",
-        x=1
+        x=0.93
     ),
     margin=dict(l=20, r=20, t=20, b=20))
     fig3.update_xaxes(title_text="Epidemiological week")
     fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False)
     fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True)
-    fig3.update_layout(width=800)
+    # fig3.update_layout(width=800)
 
     return fig3
 
