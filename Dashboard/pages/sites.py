@@ -119,7 +119,10 @@ def make_map(my_dropdown):
 )
 def line_chart(my_dropdown):
     dff = df[(df["District"] == my_dropdown)]
+    unique_sites = dff['Site'].unique() #identifying all the unique site names so we can use it in for loop and create a graph for each
+
     fig3 = make_subplots(specs=[[{"secondary_y": True}]])
+
 
     fig3.add_trace(
         go.Bar(
@@ -127,40 +130,27 @@ def line_chart(my_dropdown):
             marker_color='gray',
             name="Clinical Cases"),
         secondary_y=False)  # specify for colour for df
-    # color mapping
-    color_mapping = {'Zandvleit Wastewater Treatment Works': 'blue',
-                     'Borcheds Quarry Wastewater Treatment Works': 'red',
-                     'East Bank Wastewater Treatment Works': 'blue',
-                     'Mdantsane Wastewater Treatment Works': 'red',
-                     'ERWAT Vlakplaat Wastewater Treatment Work': 'blue',
-                     'Hartebeesfontein Waterworks': 'red',
-                     'Northern Wastewater Treatment Works (KZN)': 'blue',
-                     'Central Wastewater Treatment Works (KZN)': 'red',
-                     'Northern Wastewater Treatment Works (GP)': 'blue',
-                     'Goudkoppies Wastewater Treatment Works': 'red',
-                     'Sterkwater Wastewater Treatment Works': 'blue',
-                     'Bloemspruit Wastewater Treatment Works': 'red',
-                     'Brickfield Pre-treatment Works': 'blue',
-                     'Kwanobuhle Wastewater Treatment Works': 'red',
-                     'Rooiwal Wastewater Treatment Works': 'blue',
-                     'Daspoort Wastewater Treatment Works': 'red'}
 
-    # Map 'Site' values to colors using the color_mapping dictionary
-    dff['color'] = dff['Site'].map(color_mapping)
+    for site in unique_sites:
+        site_df = dff[dff['Site'] == site]
 
-    fig3.add_trace(
-        go.Scatter(
-            x=dff['Date'], y=dff['levels'],
-            mode='markers',
-            marker=dict(color=dff['color'], size=8),
-            line=dict(width=4),
-            text=dff['Site'],
-            name="Wastewater Level"), secondary_y=True)
+        fig3.add_trace(
+            go.Scatter(
+                x=site_df['Date'], y=site_df['levels'],
+                mode='lines+markers',
+                marker=dict(size=8),
+                line=dict(width=2),
+                text=site_df['Site'],
+                showlegend=True,
+                name=f"Site {site}"),
+            secondary_y=True
+        )
 
 
     fig3.update_layout(
         title=' South African SARS-CoV-2 Wastewater Levels',
         barmode='group')
+
 
     fig3.update_layout(legend=dict(
         orientation="h",
@@ -177,17 +167,3 @@ def line_chart(my_dropdown):
 
     return fig3
 
-# print(dff)
-# fig = px.line(dff, x="epiweek2", y="levels", color="Site")
-# fig.add_bar(dff, x="Date", y="n")
-# #fig.update_layout(
-#     title=' South African SARS-CoV-2 Wastewater Levels',
-#     barmode='group',
-#     xaxis=dict(dtick="M1",tickformat="%b\n%Y")
-# )
-#fig.add_bar(dff, x="Date", y="n")
-# fig.update_xaxes(title_text="Epidemiological week")
-# fig.update_yaxes(title_text="Log Genome Copies/ml (N Gene)", secondary_y=False)
-#
-#
-# return fig
