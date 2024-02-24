@@ -54,9 +54,9 @@ def seq_plot(seq_df,colorDict):
     names = {'variable':'Lineage', 'index':'Month', 'value':'Prevalence'}
 
     month = seq_df.index
-    print(month)
-    print(seq_df)#"%{label}: <br>Popularity: %{percent} </br> %{text}"
-    print(colorDict)
+    # print(month)
+    # print(seq_df)#"%{label}: <br>Popularity: %{percent} </br> %{text}"
+    # print(colorDict)
     fig2 = px.bar(seq_df,x=seq_df.index, y=seq_df.columns,
                   color_discrete_map=colorDict)  # specify for colour for df
 

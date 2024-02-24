@@ -12,15 +12,19 @@ df = pd.read_csv("data/provincial_cases_vs_levels.csv")
 
 df2 = pd.read_csv("data/seq_data.csv")
 
+
+
+### this shouldn't be there, dropping for now. 
+
 # Convert the 'lineages' column to a list of lists
 df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str) else [])
 
 # Convert the 'abundances' column to a list of lists
 df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split()] if isinstance(x, str) else [])
 
-
 # Explode the 'lineages' and 'abundances' columns to separate rows
-df2_exploded = df2.explode('Lineages').explode('Abundances')
+df2_exploded = df2.explode(['Lineages','Abundances'])
+
 
 # Reset the index after exploding
 df2_exploded = df2_exploded.reset_index(drop=True)
@@ -65,7 +69,7 @@ layout = dbc.Container([
                 value="Johannesburg MM",
                 placeholder="Please select a province",
                 multi=False,
-                style={"width": "100%"}
+                style={"width": "60%"}
             ), width=12),
     ]),
     html.Div(style={'height': '60px'}),  # Inserting an empty row with 50px height
@@ -178,11 +182,11 @@ def line_chart(my_dropdown):
     fig3.update_layout(legend=dict(
         orientation="h",
         yanchor="bottom",
-        y=-0.28,
-        xanchor="right",
-        x=0.85,
+        y=-0.35,
+        xanchor="center",
+        x=0.4,
     ),
-    margin=dict(l=20, r=20, t=20, b=20))
+    margin=dict(l=20, r=20, t=40, b=20))
     fig3.update_xaxes(title_text="Epidemiological week")
     fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False)
     fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True)
@@ -199,51 +203,71 @@ def line_chart(my_dropdown):
 )
 
 def lineage_summary(my_dropdown):
-    global df2_exploded  # Add this line to declare df2_exploded as a global variable
+    # global df2_exploded  # Add this line to declare df2_exploded as a global variable
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
 
-    # Normalize abundances for each date separately
-    df2_exploded_filtered.loc[:, "Abundances"] = df2_exploded_filtered.groupby("Date")["Abundances"].transform(
-        lambda x: x / x.sum() * 100)
-
+    # for now, just do the dumb thing. Take the most abundant lineages. 
+    top = list(df2_exploded_filtered.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
+    top.append('Other')
+    df2_exploded_filtered['Lineages']  = df2_exploded_filtered['Lineages'].apply(lambda x: x if x in top else "Other")
+    df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District','Coverage'])['Abundances'].sum().reset_index()
+    
+    # Define a color sequence for lineages
+    lineage_colors = px.colors.qualitative.Set3[0:len(top)]
+    lineage_color_map = dict(zip(top, lineage_colors))
     # Create a subplot for each site within the selected district
     unique_sites = df2_exploded_filtered['Site'].unique()
 
     # Determine the number of rows needed based on the number of unique sites
     num_rows = (len(unique_sites) + 1) // 2
 
-    fig = make_subplots(rows=num_rows, cols=2, shared_xaxes=False, shared_yaxes=False,
+    #eventually we should probably use shared x axes, with 
+    fig = make_subplots(rows=num_rows, cols=2, shared_xaxes=True, shared_yaxes=False,
                         subplot_titles=unique_sites)
-
-    # Define a color sequence for lineages
-    lineage_colors = px.colors.qualitative.Set1[:df2_exploded['Lineages'].nunique()]
-
+    cSet = []
     for i, site in enumerate(unique_sites, start=1):
-        site_df = df2_exploded[df2_exploded['Site'] == site].copy()
-        site_df["Abundances"] = site_df.groupby("Date")["Abundances"].transform(lambda x: x / x.sum() * 100)
+        site_df = df2_exploded_filtered[df2_exploded_filtered['Site'] == site].copy()
 
-        # Create a mapping of lineages to colors
-        lineage_color_map = dict(zip(site_df['Lineages'].unique(), lineage_colors))
-
+        site_df["Abundances"] = site_df['Abundances']*100.
+        # print(site_df.groupby("Date")["Abundances"].sum())
         # Calculate the row and column indices for the subplot
         row_index = (i - 1) // 2 + 1
         col_index = (i - 1) % 2 + 1
-
+        
         for lineage, color in lineage_color_map.items():
             lineage_df = site_df[site_df['Lineages'] == lineage]
-
-            fig.add_trace(
+            if lineage_df.shape[0]==0:
+                continue
+            if lineage in cSet:
+                fig.add_trace(
+                    go.Bar(
+                        x=lineage_df['Date'],
+                        y=lineage_df['Abundances'],
+                        name=lineage,  # Use lineage name as legend entry
+                        marker_color=lineage_color_map[lineage],
+                        showlegend=False,
+                        width = 300000000
+                    ),
+                    row=row_index, col=col_index
+                )
+            else:
+                cSet.append(lineage)
+                fig.add_trace(
                 go.Bar(
                     x=lineage_df['Date'],
                     y=lineage_df['Abundances'],
                     name=lineage,  # Use lineage name as legend entry
-                    marker_color=color
+                    marker_color=lineage_color_map[lineage],
+                    showlegend=True,
+                    width= 300000000
                 ),
                 row=row_index, col=col_index
             )
+        #
+        fig.update_xaxes(showticklabels=True, row=row_index, col=col_index)
 
         # Set y-axis range for each subplot
-        fig.update_yaxes(range=[0, 100], row=row_index, col=col_index)
+        fig.update_yaxes(showticklabels=True, title='Lineage Prevalence',range=[0, 100.], row=row_index, col=col_index)
 
         # Add black line along axes
         fig.update_xaxes(showline=True, linewidth=1, linecolor='black')
@@ -255,7 +279,8 @@ def lineage_summary(my_dropdown):
                       barmode="stack",
                       xaxis=dict(tickformat='%b %Y'),
                       paper_bgcolor='rgba(0,0,0,0)',
-                      plot_bgcolor='rgba(0,0,0,0)'
+                      plot_bgcolor='rgba(0,0,0,0)',
+                      margin=dict(l=20, r=20, t=40, b=20)
                       )
     return fig
 
