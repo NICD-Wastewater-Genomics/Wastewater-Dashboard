@@ -64,7 +64,10 @@ layout = dbc.Container([
                     {'label': "Johannesburg - Gauteng", "value": "Johannesburg MM"},
                     {'label': "Tshwane - Gauteng", "value": "Tshwane MM"},
                     {'label': "Ethekwini - KwaZulu Natal", "value": "Ethekwini MM"},
-                    {'label': "Cape Town - Western Cape", "value": "Cape Town MM"}
+                    {'label': "Cape Town - Western Cape", "value": "Cape Town MM"},
+                    {'label': "Ehlanzeni - Mpumalanga", "value": "Ehlanzeni DM"},
+                    {'label': "Rustenburg - North West", "value": "Rustenburg Local Municipality"},
+                    {'label': "Cape Town - Limpopo", "value": "Vhembe DM"},
                 ],
                 value="Johannesburg MM",
                 placeholder="Please select a province",
