@@ -17,9 +17,11 @@ layout = dbc.Container([
         dbc.Col(dbc.Card(card_content2, color="primary", inverse=True)),
         dbc.Col(dbc.Card(card_content3, color="primary", inverse=True))
         ]),
+    html.H3(id="H3_",children=' South African SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
         dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
         ]),
+    html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
     dcc.Graph(id="seq_plot", figure=seq_plot(seq_df, colorDict), config={'displayModeBar': False})
      ]),
