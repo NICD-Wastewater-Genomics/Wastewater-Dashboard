@@ -6,13 +6,20 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import pandas as pd
 import json
+from savgol import non_uniform_savgol
+
 dash.register_page(__name__)
 
 df = pd.read_csv("data/provincial_cases_vs_levels.csv")
 
-df2 = pd.read_csv("data/seq_data.csv")
+df_ = pd.read_csv("data/seq_data.csv")
 
+df_['Sample'] = df_['Sample'].apply(lambda x:x.replace('ENV-',''))
+df_ = df_[['Sample','Site','Province','District','Date','Coverage']]
+df2 = pd.read_csv("data/merged_data.tsv",sep='\t',index_col=0)
+df2 = df2.merge(df_,left_index=True,right_on='Sample') ### just use data for which we have complete metadata
 
+# df2 = df2.rename(columns={"SiteProvince": "Province", "DictrictName": "District"})
 
 ### this shouldn't be there, dropping for now. 
 
@@ -20,11 +27,15 @@ df2 = pd.read_csv("data/seq_data.csv")
 df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str) else [])
 
 # Convert the 'abundances' column to a list of lists
-df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split()] if isinstance(x, str) else [])
+df2['Abundances'] = df2['Abundances'].apply(lambda x: x.replace('[','').replace(']',''))
+df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split(',')] if isinstance(x, str) else [])
+
+
 
 # Explode the 'lineages' and 'abundances' columns to separate rows
 df2_exploded = df2.explode(['Lineages','Abundances'])
 
+# print(df2_exploded)
 
 # Reset the index after exploding
 df2_exploded = df2_exploded.reset_index(drop=True)
@@ -80,7 +91,7 @@ layout = dbc.Container([
         dbc.Col(dcc.Graph(id='map_plot', config={'displayModeBar': False}), width=6),
         dbc.Col(dcc.Graph(id="the_graph", config={'displayModeBar': False}), width=6),
     ]),
-    html.Div(style={'height': '85px'}),  # Inserting an empty row with 20px height
+    html.Div(style={'height': '40px'}),
     dbc.Row([
         dbc.Col(dcc.Graph(id="seq_graph", config={'displayModeBar': False}), width=12),
     ]),
@@ -157,21 +168,39 @@ def line_chart(my_dropdown):
             name="Clinical Cases"),
         secondary_y=False)  # specify for colour for df
 
-    for site in unique_sites:
+    for j0, site in enumerate(unique_sites):
+
+        color0 = px.colors.qualitative.Set2[j0]
         site_df = dff[dff['Site'] == site]
+
+        df_s1 = site_df[['Date','levels']]
+        df_s1['Date'] = pd.to_datetime(df_s1['Date'])
+        df_s1 = df_s1[~df_s1['levels'].isna()]
+        numberDates = [dvi.value/10**11 for dvi in df_s1['Date']]
+        df_s1['ww_smoothed'] = non_uniform_savgol(numberDates,df_s1['levels'].to_numpy(),7,1)
 
         fig3.add_trace(
             go.Scatter(
                 x=site_df['Date'], y=site_df['levels'],
-                mode='lines+markers',
-                marker=dict(size=8),
-                line=dict(width=2),
+                mode='markers',
+                marker=dict(size=8,color=color0),
+                # line=dict(width=2,color=color0),
                 text=site_df['Site'],
                 showlegend=True,
                 name=f"Site {site}"),
             secondary_y=True
         )
-
+        fig3.add_trace(
+            go.Scatter(
+                x=df_s1['Date'], y=df_s1['ww_smoothed'],
+                mode='lines',
+                # marker=dict(size=8),
+                line=dict(width=2,color=color0),
+                text=site_df['Site'],
+                showlegend=False,
+                name=f"Site {site}"),
+            secondary_y=True
+        )
 
     fig3.update_layout(
         title=' SARS-CoV-2 Wastewater Levels',
@@ -191,8 +220,8 @@ def line_chart(my_dropdown):
     ),
     margin=dict(l=20, r=20, t=40, b=20))
     fig3.update_xaxes(title_text="Epidemiological week")
-    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False)
-    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True)
+    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False,range=[0,site_df['n'].max()*1.02])
+    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True,range=[0,site_df['levels'].max()*1.02])
     # fig3.update_layout(width=800),
 
     fig3.update_layout(paper_bgcolor='rgba(0,0,0,0)',
@@ -208,7 +237,6 @@ def line_chart(my_dropdown):
 def lineage_summary(my_dropdown):
     # global df2_exploded  # Add this line to declare df2_exploded as a global variable
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
-
     # for now, just do the dumb thing. Take the most abundant lineages. 
     top = list(df2_exploded_filtered.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
     top.append('Other')
@@ -216,8 +244,10 @@ def lineage_summary(my_dropdown):
     df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District','Coverage'])['Abundances'].sum().reset_index()
     
     # Define a color sequence for lineages
-    lineage_colors = px.colors.qualitative.Set3[0:len(top)]
-    lineage_color_map = dict(zip(top, lineage_colors))
+    with open('data/color_map.json') as cdat:
+        lineage_color_map = json.load(cdat)
+    # lineage_colors = px.colors.qualitative.Set3[0:len(top)]
+    # lineage_color_map = dict(zip(top, lineage_colors))
     # Create a subplot for each site within the selected district
     unique_sites = df2_exploded_filtered['Site'].unique()
 
@@ -230,6 +260,7 @@ def lineage_summary(my_dropdown):
     cSet = []
     for i, site in enumerate(unique_sites, start=1):
         site_df = df2_exploded_filtered[df2_exploded_filtered['Site'] == site].copy()
+        # print(df2_exploded_filtered)
 
         site_df["Abundances"] = site_df['Abundances']*100.
         # print(site_df.groupby("Date")["Abundances"].sum())
@@ -277,7 +308,7 @@ def lineage_summary(my_dropdown):
         fig.update_yaxes(showline=True, showgrid=True,linewidth=1, linecolor='black')
 
     fig.update_layout(showlegend=True,
-                      legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=0.93),
+                      legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.5,font={'size':14}),
                       height=500 * num_rows,
                       barmode="stack",
                       xaxis=dict(tickformat='%b %Y'),
