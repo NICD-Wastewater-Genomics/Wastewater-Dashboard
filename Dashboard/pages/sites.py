@@ -78,7 +78,7 @@ layout = dbc.Container([
                     {'label': "Cape Town - Western Cape", "value": "Cape Town MM"},
                     {'label': "Ehlanzeni - Mpumalanga", "value": "Ehlanzeni DM"},
                     {'label': "Rustenburg - North West", "value": "Rustenburg Local Municipality"},
-                    {'label': "Cape Town - Limpopo", "value": "Vhembe DM"},
+                    {'label': "Vhembe - Limpopo", "value": "Vhembe DM"},
                 ],
                 value="Johannesburg MM",
                 placeholder="Please select a province",
@@ -267,33 +267,36 @@ def lineage_summary(my_dropdown):
         # Calculate the row and column indices for the subplot
         row_index = (i - 1) // 2 + 1
         col_index = (i - 1) % 2 + 1
-        
+
         for lineage, color in lineage_color_map.items():
             lineage_df = site_df[site_df['Lineages'] == lineage]
             if lineage_df.shape[0]==0:
                 continue
             if lineage in cSet:
                 fig.add_trace(
-                    go.Bar(
+                    go.Scatter(
                         x=lineage_df['Date'],
                         y=lineage_df['Abundances'],
                         name=lineage,  # Use lineage name as legend entry
                         marker_color=lineage_color_map[lineage],
                         showlegend=False,
-                        width = 300000000
+                        stackgroup='one',
+                        #width = 300000000
                     ),
+
                     row=row_index, col=col_index
                 )
             else:
                 cSet.append(lineage)
                 fig.add_trace(
-                go.Bar(
+                go.Scatter(
                     x=lineage_df['Date'],
                     y=lineage_df['Abundances'],
                     name=lineage,  # Use lineage name as legend entry
                     marker_color=lineage_color_map[lineage],
                     showlegend=True,
-                    width= 300000000
+                    stackgroup='one',
+                    #width= 300000000
                 ),
                 row=row_index, col=col_index
             )
@@ -317,6 +320,3 @@ def lineage_summary(my_dropdown):
                       margin=dict(l=20, r=20, t=40, b=20)
                       )
     return fig
-
-
-

@@ -88,9 +88,10 @@ def seq_plot(seq_df,colorDict):
     # print(month)
     # print(seq_df)#"%{label}: <br>Popularity: %{percent} </br> %{text}"
     # print(colorDict)
-    fig2 = px.bar(seq_df,x=seq_df.index, y=seq_df.columns,
-                  color_discrete_map=colorDict)  # specify for colour for df
-
+    # fig2 = px.bar(seq_df,x=seq_df.index, y=seq_df.columns,
+    #               color_discrete_map=colorDict)  # specify for colour for df
+    fig2 = px.area(seq_df,x=seq_df.index, y=seq_df.columns,
+                 color_discrete_map=colorDict)
 
     fig2.update_layout(
         legend=dict(
@@ -101,11 +102,12 @@ def seq_plot(seq_df,colorDict):
         x=1,
         font={'size':16}
     ),margin=dict(l=40, r=75, t=30, b=20))
-    fig2.update_layout(width=800, xaxis_range=[start,end],template='none') 
-    fig2.update_layout(legend_title_text = names['variable'])#,hovermode='x unified')
+    fig2.update_layout(width=800, xaxis_range=[start, end], template='none')
+    fig2.update_layout(legend_title_text=names['variable'])#,hovermode='x unified')
     # fig2.update_traces(hovertemplate = 'Lineage: %{y} <br> Month %{x}')
     fig2.update_xaxes(title_text="",hoverformat = "%b %Y")
-    fig2.update_yaxes(title_text="Lineage Prevalence",range=[0,1])
+    fig2.update_yaxes(title_text="Lineage Prevalence",range=[0,1] #,tickformat='%' adding the tickformat as % does something weird to the y-axis
+                      )
     return fig2
 
 
