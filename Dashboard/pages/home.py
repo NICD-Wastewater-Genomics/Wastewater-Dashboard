@@ -30,7 +30,10 @@ layout = dbc.Container([
     dbc.Row(
         [dbc.Col(
             [html.H1(id="H1", children="SARS-CoV-2 Wastewater Dashboard")],
-            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "marginTop": 30, "marginBottom": 30}),
+            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "marginTop": 30, "marginBottom": 10}),
+    html.P(id="intro",children='To monitor the prevalence of SARS-CoV-2 infections across South Africa, we are measuring virus concentrations\
+        across the country. Fragments of SARS-CoV-2 RNA are shed in urine and stool and can serve as an early indicator of COVID-19 burden in\
+        community. ',style={"font-size":20}),
     dbc.Row([
         dbc.Col(dbc.Card(card_content1, color="primary", inverse=True)),  # inverse ensures text & card colour inverted
         dbc.Col(dbc.Card(card_content2, color="primary", inverse=True)),
