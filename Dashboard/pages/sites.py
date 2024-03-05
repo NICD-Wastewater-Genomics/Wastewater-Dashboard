@@ -274,14 +274,14 @@ def lineage_summary(my_dropdown):
                 continue
             if lineage in cSet:
                 fig.add_trace(
-                    go.Scatter(
+                    go.Bar(
                         x=lineage_df['Date'],
                         y=lineage_df['Abundances'],
                         name=lineage,  # Use lineage name as legend entry
                         marker_color=lineage_color_map[lineage],
                         showlegend=False,
-                        stackgroup='one',
-                        #width = 300000000
+                        # stackgroup='one',
+                        width = 300000000
                     ),
 
                     row=row_index, col=col_index
@@ -289,14 +289,14 @@ def lineage_summary(my_dropdown):
             else:
                 cSet.append(lineage)
                 fig.add_trace(
-                go.Scatter(
+                go.Bar(
                     x=lineage_df['Date'],
                     y=lineage_df['Abundances'],
                     name=lineage,  # Use lineage name as legend entry
                     marker_color=lineage_color_map[lineage],
                     showlegend=True,
-                    stackgroup='one',
-                    #width= 300000000
+                    # stackgroup='one',
+                    width= 300000000
                 ),
                 row=row_index, col=col_index
             )

@@ -2,7 +2,6 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 import plotly.express as px
-import json
 from datetime import date
 from scipy.signal import savgol_filter
 from savgol import non_uniform_savgol
@@ -76,39 +75,6 @@ def bar_chart(df):
 
 
     return fig
-
-seq_df = pd.read_csv("data/NICD_monthly.csv",index_col=0)
-seq_df = seq_df[seq_df.index >=start] # switch to last 12 or 24 months? 
-with open('data/color_map.json') as cdat:
-    colorDict = json.load(cdat)
-def seq_plot(seq_df,colorDict):
-    names = {'variable':'Lineage', 'index':'Month', 'value':'Prevalence'}
-
-    month = seq_df.index
-    # print(month)
-    # print(seq_df)#"%{label}: <br>Popularity: %{percent} </br> %{text}"
-    # print(colorDict)
-    # fig2 = px.bar(seq_df,x=seq_df.index, y=seq_df.columns,
-    #               color_discrete_map=colorDict)  # specify for colour for df
-    fig2 = px.area(seq_df,x=seq_df.index, y=seq_df.columns,
-                 color_discrete_map=colorDict)
-
-    fig2.update_layout(
-        legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.08,
-        xanchor="right",
-        x=1,
-        font={'size':16}
-    ),margin=dict(l=40, r=75, t=30, b=20))
-    fig2.update_layout(width=800, xaxis_range=[start, end], template='none')
-    fig2.update_layout(legend_title_text=names['variable'])#,hovermode='x unified')
-    # fig2.update_traces(hovertemplate = 'Lineage: %{y} <br> Month %{x}')
-    fig2.update_xaxes(title_text="",hoverformat = "%b %Y")
-    fig2.update_yaxes(title_text="Lineage Prevalence",range=[0,1] #,tickformat='%' adding the tickformat as % does something weird to the y-axis
-                      )
-    return fig2
 
 
 
