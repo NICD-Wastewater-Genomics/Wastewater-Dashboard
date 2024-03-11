@@ -10,8 +10,9 @@ end = date.today()
 
 df = pd.read_csv("data/rsa_cases_vs_levels.csv")
 
-epiweek = df.iloc[-1, 8]
+epiweek = df.iloc[-1, -3]
 no_cases = df.iloc[-1, 1]
+no_ww = df.iloc[-1, 2]
 end_week = df.iloc[-1, -1]
 df['end'] = pd.to_datetime(df['end'])
 df = df[df['end']>=start]

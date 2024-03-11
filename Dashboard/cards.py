@@ -1,6 +1,6 @@
 from dash import html
 import dash_bootstrap_components as dbc
-from charts import epiweek, no_cases, end_week
+from charts import epiweek, no_cases, end_week, no_ww
 
 # data cards: epidemiological week, Week ending, Confirmed covid cases this week,
 # layout
@@ -26,10 +26,19 @@ card_content2 = [
 ]
 
 card_content3 = [
-    dbc.CardHeader("Laboratory-confirmed SARS-CoV-2 Cases"),
+    dbc.CardHeader("Laboratory-confirmed Cases"),
     dbc.CardBody(
         [
             html.H5(no_cases, className="card-title"),
+        ]
+    )
+]
+
+card_content4 = [
+    dbc.CardHeader("Wastewater samples collected"),
+    dbc.CardBody(
+        [
+            html.H5(no_ww, className="card-title"),
         ]
     )
 ]

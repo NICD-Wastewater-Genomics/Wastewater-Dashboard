@@ -1,7 +1,7 @@
 import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from cards import card_content1, card_content2, card_content3
+from cards import card_content1, card_content2, card_content3, card_content4
 from charts import df, bar_chart
 import pandas as pd
 from datetime import date
@@ -34,15 +34,19 @@ layout = dbc.Container([
     html.P(id="intro",children='To monitor the prevalence of SARS-CoV-2 infections across South Africa, we are measuring virus concentrations\
         across the country. Fragments of SARS-CoV-2 RNA are shed in urine and stool and can serve as an early indicator of COVID-19 burden in\
         community. ',style={"font-size":20}),
+html.Div(style={'height': '20px'}),
     dbc.Row([
         dbc.Col(dbc.Card(card_content1, color="primary", inverse=True)),  # inverse ensures text & card colour inverted
         dbc.Col(dbc.Card(card_content2, color="primary", inverse=True)),
-        dbc.Col(dbc.Card(card_content3, color="primary", inverse=True))
+        dbc.Col(dbc.Card(card_content3, color="primary", inverse=True)),
+        dbc.Col(dbc.Card(card_content4, color="primary", inverse=True))
         ]),
+    html.Div(style={'height': '50px'}),  # Inserting an empty row with 50px height
     html.H3(id="H3_",children=' South African SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
         dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
         ]),
+    html.Div(style={'height': '25px'}),  # Inserting an empty row with 50px height
     html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
     html.Div(
                 [dbc.RadioItems(
