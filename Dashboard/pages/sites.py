@@ -61,7 +61,7 @@ dfg['val0'] = 0
 
 layout = dbc.Container([
     dbc.Row(
-        dbc.Col(html.H1("SARS-CoV-2 Wastewater- Provincial"), xl=12, lg=12, md=12, sm=12, xs=12),
+        dbc.Col(html.H1("SARS-CoV-2 Wastewater- Districts"), xl=12, lg=12, md=12, sm=12, xs=12),
         style={"textAlign": "center", "marginTop": 30, "marginBottom": 30}
     ),
     dbc.Row([
@@ -84,14 +84,18 @@ layout = dbc.Container([
                 placeholder="Please select a province",
                 multi=False,
                 style={"width": "60%"}
-            ), width=12),
+            ), width=6),
     ]),
     html.Div(style={'height': '60px'}),  # Inserting an empty row with 50px height
     dbc.Row([
-        dbc.Col(dcc.Graph(id='map_plot', config={'displayModeBar': False}), width=6),
-        dbc.Col(dcc.Graph(id="the_graph", config={'displayModeBar': False}), width=6),
+        dbc.Col(dcc.Graph(id='map_plot', config={'displayModeBar': False}), width=12),
+    ]),
+    html.H3(id="H3_",children=' SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
+    dbc.Row([
+        dbc.Col(dcc.Graph(id="the_graph", config={'displayModeBar': False}), width=12),
     ]),
     html.Div(style={'height': '40px'}),
+    html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
     dbc.Row([
         dbc.Col(dcc.Graph(id="seq_graph", config={'displayModeBar': False}), width=12),
     ]),
