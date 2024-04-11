@@ -31,10 +31,16 @@ layout = dbc.Container([
         [dbc.Col(
             [html.H1(id="H1", children="SARS-CoV-2 Wastewater Dashboard")],
             xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "marginTop": 30, "marginBottom": 10}),
-    html.P(id="intro",children='To monitor the prevalence of SARS-CoV-2 infections across South Africa, viral concentrations are measured\
-        across the country. Fragments of SARS-CoV-2 RNA are shed in urine and stool and can serve as an early indicator of COVID-19 burden in\
-        community. ',style={"font-size":20}),
-html.Div(style={'height': '20px'}),
+    html.Div(style={'height': '30px'}),
+    html.P(id="intro", children='SARS-CoV-2 virus is excreted in stool by persons with active and \
+        recovering COVID-19 and can be found in wastewater. Levels of SARS-CoV-2 in wastewater \
+        reflect population changes in caseload and geographical distribution of cases.  \
+        SARS-CoV-2 can be detected in wastewater before clinical cases appear. Increases in SARS-CoV-2 \
+        levels will appear before increases in clinical case load. Monitoring changes in SARS-CoV-2 levels \
+        can support public health preparedness and response activities. To monitor the prevalence of SARS-CoV-2 \
+        infections across South Africa, viral concentrations are measured\
+        and can serve as an early indicator of COVID-19 burden in the community. ',style={"font-size":20}),
+html.Div(style={'height': '50px'}),
     dbc.Row([
         dbc.Col(dbc.Card(card_content1, color="primary", inverse=True)),  # inverse ensures text & card colour inverted
         dbc.Col(dbc.Card(card_content2, color="primary", inverse=True)),
@@ -47,6 +53,10 @@ html.Div(style={'height': '20px'}),
         dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
         ]),
     html.Div(style={'height': '25px'}),  # Inserting an empty row with 50px height
+    html.P(id="seq_intro", children='SARS-CoV-2 variants in wastewater as determined by the \
+        ‘Freyja’ tool (Scripps Institute) which allows for the determination of variants \
+        in each wastewater sample',style={"font-size":20}),
+html.Div(style={'height': '50px'}),
     html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
     html.Div(
                 [dbc.RadioItems(
