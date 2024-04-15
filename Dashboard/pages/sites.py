@@ -19,7 +19,7 @@ df_ = df_[['Sample','Site','Province','District','Date','Coverage']]
 df2 = pd.read_csv("data/merged_data.tsv",sep='\t',index_col=0)
 df2 = df2.merge(df_,left_index=True,right_on='Sample') ### just use data for which we have complete metadata
 
-# df2 = df2.rename(columns={"SiteProvince": "Province", "DictrictName": "District"})
+#df2 = df2.rename(columns={"SiteProvince": "Province", "DictrictName": "District"})
 
 ### this shouldn't be there, dropping for now. 
 
@@ -31,7 +31,6 @@ df2['Abundances'] = df2['Abundances'].apply(lambda x: x.replace('[','').replace(
 df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split(',')] if isinstance(x, str) else [])
 
 
-
 # Explode the 'lineages' and 'abundances' columns to separate rows
 df2_exploded = df2.explode(['Lineages','Abundances'])
 
@@ -39,7 +38,7 @@ df2_exploded = df2.explode(['Lineages','Abundances'])
 
 # Reset the index after exploding
 df2_exploded = df2_exploded.reset_index(drop=True)
-
+#df2_exploded.to_csv("test3.csv", encoding='utf-8', index=False)
 
 #read in location of each wwtp
 sites = pd.read_csv('data/SA_sites_coords.tsv',sep='\t')
@@ -180,8 +179,15 @@ def line_chart(my_dropdown):
         df_s1 = site_df[['Date','levels']]
         df_s1['Date'] = pd.to_datetime(df_s1['Date'])
         df_s1 = df_s1[~df_s1['levels'].isna()]
-        numberDates = [dvi.value/10**11 for dvi in df_s1['Date']]
-        df_s1['ww_smoothed'] = non_uniform_savgol(numberDates,df_s1['levels'].to_numpy(),7,1)
+
+        #the newer sites only have a few data points - not enough to normalise using savgol- so for now I'm adding a condition that if
+        #the length of the data is not equal to the window size in the savgol filter, then ignore
+
+        if len(df_s1) >= 7:  # make sure this is the same as window size stated in non_uniform_savgol function
+            numberDates = [dvi.value/10**11 for dvi in df_s1['Date']]
+            df_s1['ww_smoothed'] = non_uniform_savgol(numberDates,df_s1['levels'].to_numpy(),7,1)
+        else:
+            df_s1['ww_smoothed'] = df_s1['levels'] #use original data without smoothing
 
         fig3.add_trace(
             go.Scatter(
