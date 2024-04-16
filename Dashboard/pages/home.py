@@ -4,11 +4,11 @@ import dash_bootstrap_components as dbc
 from cards import card_content1, card_content2, card_content3, card_content4
 from charts import df, bar_chart
 import pandas as pd
-from datetime import date
+from datetime import date, timedelta
 import json
 from dash import html, dcc, Input, Output, callback
 import plotly.graph_objects as go
-
+from datetime import timedelta
 
 start = '2021-12-15'
 end = date.today()
@@ -32,14 +32,11 @@ layout = dbc.Container([
             [html.H1(id="H1", children="SARS-CoV-2 Wastewater Dashboard")],
             xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "marginTop": 30, "marginBottom": 10}),
     html.Div(style={'height': '30px'}),
-    html.P(id="intro", children='SARS-CoV-2 virus is excreted in stool by persons with active and \
-        recovering COVID-19 and can be found in wastewater. Levels of SARS-CoV-2 in wastewater \
-        reflect population changes in caseload and geographical distribution of cases.  \
-        SARS-CoV-2 can be detected in wastewater before clinical cases appear. Increases in SARS-CoV-2 \
-        levels will appear before increases in clinical case load. Monitoring changes in SARS-CoV-2 levels \
-        can support public health preparedness and response activities. To monitor the prevalence of SARS-CoV-2 \
-        infections across South Africa, viral concentrations are measured\
-        and can serve as an early indicator of COVID-19 burden in the community. ',style={"font-size":20}),
+    html.P(id="intro", children='To monitor the levels of SARS-CoV-2 infections across South Africa,\
+        NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus is\
+        excreted in stool by persons with COVID-19 and can be detected at wastewater aggregation sites.\
+        The levels of SARS-CoV-2 in wastewater reflect caseload and geographic distribution of cases,\
+        and often provide an early warning of increases in infections in the community.',style={"font-size":20}),
 html.Div(style={'height': '50px'}),
     dbc.Row([
         dbc.Col(dbc.Card(card_content1, color="primary", inverse=True)),  # inverse ensures text & card colour inverted
@@ -48,14 +45,16 @@ html.Div(style={'height': '50px'}),
         dbc.Col(dbc.Card(card_content4, color="primary", inverse=True))
         ]),
     html.Div(style={'height': '50px'}),  # Inserting an empty row with 50px height
-    html.H3(id="H3_",children=' South African SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
+    html.H3(id="H3_",children=' National SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
         dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
         ]),
     html.Div(style={'height': '25px'}),  # Inserting an empty row with 50px height
-    html.P(id="seq_intro", children='SARS-CoV-2 variants in wastewater as determined by the \
-        ‘Freyja’ tool (Scripps Institute) which allows for the determination of variants \
-        in each wastewater sample',style={"font-size":20}),
+    html.P(id="seq_intro", children=['To monitor the evolution and spread SARS-CoV-2\
+        lineages across South Africa, wastewater virus sequencing followed by bioinformatic analyses with the ',
+        html.A("Freyja",href='https://github.com/andersen-lab/Freyja'),
+        ' bioinformatic tool allows for the determination of variants in each wastewater sample.\
+        Samples are aggregated across all sites, providing a national characterization of lineage prevalence.'],style={"font-size":20}),
 html.Div(style={'height': '50px'}),
     html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
     html.Div(
@@ -74,9 +73,9 @@ html.Div(style={'height': '50px'}),
                 )],style={ "marginTop": 0,"marginBottom": 0}),
     dbc.Row([
         dcc.Graph(id="seq_graph0", config={'displayModeBar': False},style={ "width": "100%"})
-    # dcc.Graph(id="seq_plot", figure=seq_plot(seq_df, colorDict), config={'displayModeBar': False})
      ]),
-    ])#, fluid=True)  # fills up empty space with the graphs
+    # add logos here!! 
+    ])
 
 @callback(
     Output("seq_graph0", "figure"),
@@ -85,27 +84,16 @@ def seq_plot(plottype):
     names = {'variable':'Lineage', 'index':'Month', 'value':'Prevalence'}
 
     month = seq_df.index
-    # print(month)
-    # print(seq_df)#"%{label}: <br>Popularity: %{percent} </br> %{text}"
-    # print(colorDict)
     if plottype=='monthly':
         fig2 = go.Figure(data=[go.Bar(name=sfc, x=seq_df.index, y=seq_df[sfc], marker_color=colorDict[sfc]) for sfc in seq_df.columns])
         # # Change the bar mode
-        fig2.update_layout(barmode='stack')
-        fig2.update_layout(legend_title_text=names['variable'])#,hovermode='x unified')
+        fig2.update_layout(barmode='stack',yaxis_tickformat = '.0%')
+        fig2.update_layout(legend_title_text=names['variable'])
     else:
         fig2 = go.Figure([go.Scatter(name=sfc,x=seq_df_daily.index, y=seq_df_daily[sfc], marker_color=colorDict[sfc],
-                                      mode='lines', stackgroup='one') for sfc in seq_df_daily.columns])
-        fig2.update_layout(legend_title_text=names['variable'],hovermode='x unified',hoverlabel=dict(font_size=10))
-                         # + [go.Scatter(x=seq_df.index, y=[1e-10 for si in seq_df.index], marker_color='black',
-                         #              mode='lines', stackgroup='one', line=dict(width=1))])
-
-
-    # fig2 = px.bar(seq_df,x=seq_df.index, y=seq_df.columns,
-    #               color_discrete_map=colorDict)  # specify for colour for df
-    # fig2 = px.area(seq_df,x=seq_df.index, y=seq_df.columns,
-    #              color_discrete_map=colorDict)
-
+                                      mode='lines', stackgroup='one', fillcolor=colorDict[sfc],
+                                      line=dict(width=0.0)) for sfc in seq_df_daily.columns])
+        fig2.update_layout(legend_title_text=names['variable'],hovermode='x unified',hoverlabel=dict(font_size=12), yaxis_tickformat = '.0%')
     fig2.update_layout(
         legend=dict(
         orientation="h",
@@ -113,7 +101,7 @@ def seq_plot(plottype):
         y=-.35,
         xanchor="right",
         x=1,
-        font={'size':16}
+        font={'size':15}
     ),margin=dict(l=40, r=75, t=15, b=0))
 
     fig2.update_layout(xaxis_range=[start, end], template='none')
