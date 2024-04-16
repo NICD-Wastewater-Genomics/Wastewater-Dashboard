@@ -63,6 +63,7 @@ layout = dbc.Container([
         dbc.Col(html.H1("SARS-CoV-2 Wastewater- Districts"), xl=12, lg=12, md=12, sm=12, xs=12),
         style={"textAlign": "center", "marginTop": 30, "marginBottom": 30}
     ),
+    html.P(id="dropdown_menu", children='Please select a district below',style={"font-size":20}),
     dbc.Row([
         dbc.Col(dcc.Dropdown(
                 id="my_dropdown",
@@ -80,25 +81,48 @@ layout = dbc.Container([
                     {'label': "Vhembe - Limpopo", "value": "Vhembe DM"},
                 ],
                 value="Johannesburg MM",
-                placeholder="Please select a province",
+                placeholder="Please select a district below",
                 multi=False,
-                style={"width": "60%"}
-            ), width=6),
+                style={"width": "65%"}
+            ), width=10),
     ]),
+
     html.Div(style={'height': '60px'}),  # Inserting an empty row with 50px height
+
     dbc.Row([
-        dbc.Col(dcc.Graph(id='map_plot', config={'displayModeBar': False}), width=12),
+        dbc.Col(dbc.Card(
+            [
+                dbc.CardHeader(html.H3("Wastewater Sampling Locations",
+                                       style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
+                dbc.CardBody(dcc.Graph(id='map_plot', config={'displayModeBar': False}))
+            ],
+            body=True, color="dark", outline=True
+        ), width=6),
+        dbc.Col(dbc.Card(
+            [
+                dbc.CardHeader(html.H3("SARS-CoV-2 Wastewater Levels",
+                                       style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
+                dbc.CardBody(dcc.Graph(id="the_graph", config={'displayModeBar': False}))
+            ],
+            body=True, color="dark", outline=True
+        ), width=6),
     ]),
-    html.H3(id="H3_",children=' SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
+
+    html.Div(style={'height': '40px'}),
+
     dbc.Row([
-        dbc.Col(dcc.Graph(id="the_graph", config={'displayModeBar': False}), width=12),
+        dbc.Col(dbc.Card(
+            [
+                dbc.CardHeader(html.H3("Lineage Prevalence Observed via Wastewater",
+                                       style={"textAlign": "center", "marginTop": 5, "marginBottom": 5})),
+                dbc.CardBody(dcc.Graph(id="seq_graph", config={'displayModeBar': False}))
+            ],
+            body=True, color="dark", outline=True
+        ), width=12),
     ]),
     html.Div(style={'height': '40px'}),
-    html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
-    dbc.Row([
-        dbc.Col(dcc.Graph(id="seq_graph", config={'displayModeBar': False}), width=12),
-    ]),
-], fluid=True)
+], style={'backgroundColor':'#F0FFF0'},
+    fluid=True)
 
 
 @callback(

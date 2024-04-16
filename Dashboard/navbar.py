@@ -16,7 +16,7 @@ def create_navbar():
                     # dbc.DropdownMenuItem("Mutations", href='/muts'),
                     # dbc.DropdownMenuItem("Lineages", href='/lins'),
                     # dbc.DropdownMenuItem("Samples", href='/samples'),
-                    dbc.DropdownMenuItem("SARS-CoV-2- Provincial", href='/sites'),
+                    dbc.DropdownMenuItem("SARS-CoV-2- Districts", href='/sites'),
                 ],
             ),
         ],
