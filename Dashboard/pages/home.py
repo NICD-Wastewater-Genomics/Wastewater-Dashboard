@@ -29,33 +29,33 @@ with open('data/color_map.json') as cdat:
 layout = dbc.Container([
     dbc.Row(
         [dbc.Col(
-            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Dashboard")],
+            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance")],
             xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "marginTop": 30, "marginBottom": 10}),
-    html.Div(style={'height': '30px'}),
+    html.Div(style={'height': '15px'}),
     html.P(id="intro", children='To monitor the levels of SARS-CoV-2 infections across South Africa,\
-        NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus is\
+        NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus fragments are\
         excreted in stool by persons with COVID-19 and can be detected at wastewater aggregation sites.\
         The levels of SARS-CoV-2 in wastewater reflect caseload and geographic distribution of cases,\
         and often provide an early warning of increases in infections in the community.',style={"font-size":20}),
-html.Div(style={'height': '50px'}),
+html.Div(style={'height': '5px'}),
     dbc.Row([
         dbc.Col(dbc.Card(card_content1, color="primary", inverse=True)),  # inverse ensures text & card colour inverted
         dbc.Col(dbc.Card(card_content2, color="primary", inverse=True)),
         dbc.Col(dbc.Card(card_content3, color="primary", inverse=True)),
         dbc.Col(dbc.Card(card_content4, color="primary", inverse=True))
         ]),
-    html.Div(style={'height': '50px'}),  # Inserting an empty row with 50px height
+    html.Div(style={'height': '30px'}),  # Inserting an empty row with 50px height
     html.H3(id="H3_",children=' National SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
         dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
         ]),
     html.Div(style={'height': '25px'}),  # Inserting an empty row with 50px height
-    html.P(id="seq_intro", children=['To monitor the evolution and spread SARS-CoV-2\
+    html.P(id="seq_intro", children=['To track the evolution and spread SARS-CoV-2\
         lineages across South Africa, wastewater virus sequencing followed by bioinformatic analyses with the ',
         html.A("Freyja",href='https://github.com/andersen-lab/Freyja'),
         ' bioinformatic tool allows for the determination of variants in each wastewater sample.\
         Samples are aggregated across all sites, providing a national characterization of lineage prevalence.'],style={"font-size":20}),
-html.Div(style={'height': '50px'}),
+html.Div(style={'height': '30px'}),
     html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
     html.Div(
                 [dbc.RadioItems(

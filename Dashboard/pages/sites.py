@@ -60,10 +60,16 @@ dfg['val0'] = 0
 
 layout = dbc.Container([
     dbc.Row(
-        dbc.Col(html.H1("SARS-CoV-2 Wastewater- Districts"), xl=12, lg=12, md=12, sm=12, xs=12),
+        dbc.Col(html.H1("SARS-CoV-2 Wastewater Surveillance (District Level)"), xl=12, lg=12, md=12, sm=12, xs=12),
         style={"textAlign": "center", "marginTop": 30, "marginBottom": 30}
     ),
-    html.P(id="dropdown_menu", children='Please select a district below',style={"font-size":20}),
+    html.P(children='To provide regional information on SARS-CoV-2 evolution and spread, \
+        wastewater virus concentration and lineage prevalence trends can be resolved to the level of\
+        individual wastewater sampling sites. Trends observed at local community collections can help\
+        identify possible outbreaks prior to broader regional and national spread.',style={"font-size":20}),
+    html.Div(style={"backgroundColor":"#F0FFF0","padding":"1em",'border-radius': '25px'},children=[
+    html.P(id="dropdown_menu", children='Explore a district of interest',style={"font-size":25,"textAlign":"center",
+        "font-weight":"bold","color":"black"}),
     dbc.Row([
         dbc.Col(dcc.Dropdown(
                 id="my_dropdown",
@@ -81,14 +87,13 @@ layout = dbc.Container([
                     {'label': "Vhembe - Limpopo", "value": "Vhembe DM"},
                 ],
                 value="Johannesburg MM",
-                placeholder="Please select a district below",
+                placeholder="Select a district of interest",
                 multi=False,
-                style={"width": "65%"}
-            ), width=10),
-    ]),
+                style={'margin':'auto', 'width':'50%'}
+            ), width=10,className='justify-content-center'),
+    ],style={"align-items":"center",'justify-content': 'center'}),
 
-    html.Div(style={'height': '60px'}),  # Inserting an empty row with 50px height
-
+    html.Div(style={'height': '20px'}),  # Inserting an empty row with 50px height
     dbc.Row([
         dbc.Col(dbc.Card(
             [
@@ -96,7 +101,7 @@ layout = dbc.Container([
                                        style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
                 dbc.CardBody(dcc.Graph(id='map_plot', config={'displayModeBar': False}))
             ],
-            body=True, color="dark", outline=True
+            body=True, outline=True, color='primary',
         ), width=6),
         dbc.Col(dbc.Card(
             [
@@ -104,7 +109,7 @@ layout = dbc.Container([
                                        style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
                 dbc.CardBody(dcc.Graph(id="the_graph", config={'displayModeBar': False}))
             ],
-            body=True, color="dark", outline=True
+            body=True, outline=True, color='primary',
         ), width=6),
     ]),
 
@@ -117,12 +122,12 @@ layout = dbc.Container([
                                        style={"textAlign": "center", "marginTop": 5, "marginBottom": 5})),
                 dbc.CardBody(dcc.Graph(id="seq_graph", config={'displayModeBar': False}))
             ],
-            body=True, color="dark", outline=True
+            body=True, outline=True, color='primary',
         ), width=12),
     ]),
-    html.Div(style={'height': '40px'}),
-], style={'backgroundColor':'#F0FFF0'},
-    fluid=True)
+    # html.Div(style={'height': '40px'}),
+])],
+    fluid=True,style={"padding":"2em 2em 2em 0.5em"})
 
 
 @callback(
@@ -184,16 +189,16 @@ def make_map(my_dropdown):
 def line_chart(my_dropdown):
     dff = df[(df["District"] == my_dropdown)]
     unique_sites = dff['Site'].unique() #identifying all the unique site names so we can use it in for loop and create a graph for each
-
+    max_case = dff['n'].max()
+    max_level = dff['levels'].max()
     fig3 = make_subplots(specs=[[{"secondary_y": True}]])
-
-
+    dff0 = dff[['Date','n']].drop_duplicates(keep='first')
     fig3.add_trace(
-        go.Bar(
-            x=dff['Date'], y=dff['n'],
-            marker_color='blue',
-            name="Clinical Cases"),
-        secondary_y=False)  # specify for colour for df
+    go.Bar(
+        x=dff0['Date'], y=dff0['n'],
+        marker_color='blue',
+        name="Clinical Cases"),
+    secondary_y=False)
 
     for j0, site in enumerate(unique_sites):
 
@@ -254,8 +259,8 @@ def line_chart(my_dropdown):
     ),
     margin=dict(l=20, r=20, t=40, b=20))
     fig3.update_xaxes(title_text="Epidemiological week")
-    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False,range=[0,site_df['n'].max()*1.02])
-    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True,range=[0,site_df['levels'].max()*1.02])
+    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False,range=[0,max_case*1.02])
+    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True,range=[0,max_level*1.02])
     # fig3.update_layout(width=800),
 
     fig3.update_layout(paper_bgcolor='rgba(0,0,0,0)',
