@@ -7,9 +7,10 @@ def create_navbar():
     navbar = dbc.Navbar(
         id="navbar",
         children=[
-            dbc.Row(
-                [
-                    dbc.Col(html.Img(src='assets/nicd_ww_logo.png', height="150rem")),
+
+                    dbc.Col(html.A([
+                        html.Img(src='assets/nicd_ww_logo.png', height="200rem"),
+                    ],href="/"),width={'size':3,'offset':1}),
                     dbc.Col(
                         dbc.DropdownMenu(
                             nav=True,
@@ -17,18 +18,15 @@ def create_navbar():
                             label="Menu",
                             align_end=True,
                             children=[  # Add as many menu items as you need
-                                dbc.DropdownMenuItem("SARS-CoV-2- National", href='/'),
+                                dbc.DropdownMenuItem("SARS-CoV-2- National", href='/',style = {'font-size':16}),
                                 dbc.DropdownMenuItem(divider=True),
-                                dbc.DropdownMenuItem("SARS-CoV-2- Districts", href='/sites'),
+                                dbc.DropdownMenuItem("SARS-CoV-2- Districts", href='/sites',style = {'font-size':16}),
                             ],
-                        ),
-                    ),
-                ],
-                align="center",
-            ),
+                        style={"float":'left','font-size':24}),
+                    width={'size':3,'offset':6}),
         ],
         #sticky="top",  # Uncomment if you want the navbar to always appear at the top on scroll.
-        color="#CFE18A",
+        color="white",
         dark=False,  # Change this to change color of text within the navbar (False for dark text)
     )
 

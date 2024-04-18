@@ -12,16 +12,10 @@ dash.register_page(__name__)
 
 df = pd.read_csv("data/provincial_cases_vs_levels.csv")
 
-df_ = pd.read_csv("data/seq_data.csv")
-
-df_['Sample'] = df_['Sample'].apply(lambda x:x.replace('ENV-',''))
-df_ = df_[['Sample','Site','Province','District','Date','Coverage']]
 df2 = pd.read_csv("data/merged_data.tsv",sep='\t',index_col=0)
-df2 = df2.merge(df_,left_index=True,right_on='Sample') ### just use data for which we have complete metadata
-
-#df2 = df2.rename(columns={"SiteProvince": "Province", "DictrictName": "District"})
-
-### this shouldn't be there, dropping for now. 
+df2['Sample'] = df2.index
+df2 = df2.rename(columns={"SampleCollectionDate":"Date","SiteProvince": "Province",
+                          "DistrictName": "District","SiteName":"Site"})
 
 # Convert the 'lineages' column to a list of lists
 df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str) else [])
@@ -60,9 +54,9 @@ dfg['val0'] = 0
 
 layout = dbc.Container([
     dbc.Row(
-        dbc.Col(html.H1("SARS-CoV-2 Wastewater Surveillance (District Level)"), xl=12, lg=12, md=12, sm=12, xs=12),
-        style={"textAlign": "center", "marginTop": 30, "marginBottom": 30}
-    ),
+        [dbc.Col(
+            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance(District Level)", style={'color':'white'})],
+            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30,"backgroundColor":"#CFE18A"}),
     html.P(children='To provide regional information on SARS-CoV-2 evolution and spread, \
         wastewater virus concentration and lineage prevalence trends can be resolved to the level of\
         individual wastewater sampling sites. Trends observed at local community collections can help\
@@ -280,7 +274,7 @@ def lineage_summary(my_dropdown):
     top = list(df2_exploded_filtered.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
     top.append('Other')
     df2_exploded_filtered['Lineages']  = df2_exploded_filtered['Lineages'].apply(lambda x: x if x in top else "Other")
-    df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District','Coverage'])['Abundances'].sum().reset_index()
+    df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District'])['Abundances'].sum().reset_index()
     
     # Define a color sequence for lineages
     with open('data/color_map.json') as cdat:

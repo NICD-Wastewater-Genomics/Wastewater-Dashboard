@@ -29,8 +29,8 @@ with open('data/color_map.json') as cdat:
 layout = dbc.Container([
     dbc.Row(
         [dbc.Col(
-            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance")],
-            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "marginTop": 30, "marginBottom": 10}),
+            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance", style={'color':'white'})],
+            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30,"backgroundColor":"#CFE18A"}),
     html.Div(style={'height': '15px'}),
     html.P(id="intro", children='To monitor the levels of SARS-CoV-2 infections across South Africa,\
         NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus fragments are\
@@ -48,7 +48,7 @@ html.Div(style={'height': '5px'}),
     html.H3(id="H3_",children=' National SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
         dcc.Graph(id="bar_plot", figure=bar_chart(df), config={'displayModeBar': False})
-        ]),
+        ],style={"width": "85%","align-items":"center",'justify-content': 'center','margin':'auto'}),
     html.Div(style={'height': '25px'}),  # Inserting an empty row with 50px height
     html.P(id="seq_intro", children=['To track the evolution and spread SARS-CoV-2\
         lineages across South Africa, wastewater virus sequencing followed by bioinformatic analyses with the ',
@@ -71,11 +71,11 @@ html.Div(style={'height': '30px'}),
                     value="monthly",
                     style={ "width": "100%", "justifyContent": "flex-end" }
                 )],style={ "marginTop": 0,"marginBottom": 0}),
-    dbc.Row([
+    html.Div([
         dcc.Graph(id="seq_graph0", config={'displayModeBar': False},style={ "width": "100%"})
-     ]),
+     ],style={"width": "85%","align-items":"center",'justify-content': 'center','margin':'auto'}),
     # add logos here!! 
-    ])
+    ],fluid=True)
 
 @callback(
     Output("seq_graph0", "figure"),
