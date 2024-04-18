@@ -3,26 +3,31 @@ import dash_bootstrap_components as dbc
 
 
 def create_navbar():
-    navbar = dbc.NavbarSimple(
+
+    navbar = dbc.Navbar(
+        id="navbar",
         children=[
-            dbc.DropdownMenu(
-                nav=True,
-                in_navbar=True,
-                label="Menu",
-                align_end=True,
-                children=[  # Add as many menu items as you need
-                    dbc.DropdownMenuItem("SARS-CoV-2- National", href='/'),
-                    dbc.DropdownMenuItem(divider=True),
-                    # dbc.DropdownMenuItem("Mutations", href='/muts'),
-                    # dbc.DropdownMenuItem("Lineages", href='/lins'),
-                    # dbc.DropdownMenuItem("Samples", href='/samples'),
-                    dbc.DropdownMenuItem("SARS-CoV-2- Districts", href='/sites'),
+            dbc.Row(
+                [
+                    dbc.Col(html.Img(src='assets/nicd_ww_logo.png', height="150rem")),
+                    dbc.Col(
+                        dbc.DropdownMenu(
+                            nav=True,
+                            in_navbar=True,
+                            label="Menu",
+                            align_end=True,
+                            children=[  # Add as many menu items as you need
+                                dbc.DropdownMenuItem("SARS-CoV-2- National", href='/'),
+                                dbc.DropdownMenuItem(divider=True),
+                                dbc.DropdownMenuItem("SARS-CoV-2- Districts", href='/sites'),
+                            ],
+                        ),
+                    ),
                 ],
+                align="center",
             ),
         ],
-        brand="NICD Wastewater Genomics",
-        brand_href="/",
-        sticky="top",  # Uncomment if you want the navbar to always appear at the top on scroll.
+        #sticky="top",  # Uncomment if you want the navbar to always appear at the top on scroll.
         color="#CFE18A",
         dark=False,  # Change this to change color of text within the navbar (False for dark text)
     )
@@ -43,9 +48,9 @@ def create_footer():
     fdivs = [html.Hr(),
              html.P(children='Participating Institutions',
              style={"font-weight": "bold",'color':'black'}),
-             html.Img(src='assets/nicd_logo.png',height="100rem"),
-             html.Img(src='assets/gcro_logo.png',height="100rem"),
-             html.Img(src='assets/scripps_logo.png',height="100rem")
+             html.Img(src='assets/nicd_logo.png',height="100rem", style={"margin-right": "20px"}),
+             html.Img(src='assets/gcro_logo.png',height="100rem", style={"margin-right": "20px"}),
+             html.Img(src='assets/scripps_logo.png',height="100rem", style={"margin-right": "20px"})
              ]
     footer = html.Div(fdivs, style=FOOTER_STYLE)
     return footer
