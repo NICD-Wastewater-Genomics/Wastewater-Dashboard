@@ -9,8 +9,11 @@ from navbar import create_navbar, create_footer
 NAVBAR = create_navbar()
 footer = create_footer()
 
-app = dash.Dash(external_stylesheets=[dbc.themes.MINTY],
+app = dash.Dash(__name__,
+                external_stylesheets=[dbc.themes.MINTY],
                 use_pages=True)
+
+server = app.server
 
 
 # coordinate page order
@@ -28,4 +31,4 @@ app.layout = dcc.Loading(
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=False)

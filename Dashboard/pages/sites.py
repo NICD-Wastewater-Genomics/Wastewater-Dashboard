@@ -24,15 +24,11 @@ df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str
 df2['Abundances'] = df2['Abundances'].apply(lambda x: x.replace('[','').replace(']',''))
 df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split(',')] if isinstance(x, str) else [])
 
-
 # Explode the 'lineages' and 'abundances' columns to separate rows
 df2_exploded = df2.explode(['Lineages','Abundances'])
 
-# print(df2_exploded)
-
 # Reset the index after exploding
 df2_exploded = df2_exploded.reset_index(drop=True)
-#df2_exploded.to_csv("test3.csv", encoding='utf-8', index=False)
 
 #read in location of each wwtp
 sites = pd.read_csv('data/SA_sites_coords.tsv',sep='\t')
@@ -47,10 +43,6 @@ with open("data/layer1.json") as geofile:
 dfg = pd.DataFrame()
 dfg['province'] = [gj['properties']['PROVINCE'] for gj in gjson['features']]
 dfg['val0'] = 0
-# dfg = pd.DataFrame([{'province':'NC','val0':2.4},
-#                    {'province':'WC','val0':5.4},
-#                    {'province':'EC','val0':5.4},
-#                    {'province':'LIM','val0':5.4}])
 
 layout = dbc.Container([
     dbc.Row(
