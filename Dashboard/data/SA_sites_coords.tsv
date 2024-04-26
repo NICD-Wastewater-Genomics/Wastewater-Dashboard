@@ -1,21 +1,30 @@
-Site	Province	Coords	Seq	Metro
-Olifantsfontein	Gauteng	"-25.940844, 28.214397"	No	
-Vlakplaats	Gauteng	"-26.346639, 28.181972"	Yes	Ekurhuleni MM
-Daveyton	Gauteng	"-26.135778, 28.463917"	No	
-Hartebeesfontein	Gauteng	"-26.023201, 28.285105"	Yes	Ekurhuleni MM
-Daspoort	Gauteng	"-25.734514, 28.177958"	Yes	Tshwane MM
-Rooiwal	Gauteng	"-25.558514, 28.227227"	Yes	Tshwane MM
-Goudkoppies	Gauteng	"-26.271686, 27.927293"	Yes	Johannesburg MM
-Polokwane	Limpopo	"-23.863452, 29.443308"	No	
-Borcheds Quarry	Western Cape	"-33.961578, 18.589445"	Yes	Cape Town MM
-Zandvleit	Western Cape	"-34.051707, 18.723010"	Yes	Cape Town MM
-Bloemspruit	Free State	"-29.124560, 26.246714"	Yes	Mangaung MM
-Sterkwater	Free State	"-29.189167, 26.309444"	Yes	Mangaung MM
-Northern	KwaZulu-Natal	"-29.795833, 30.997546"	Yes	Ethekwini MM
-Central	KwaZulu-Natal	"-29.880661, 31.057080"	Yes	Ethekwini MM
-Kwanobuhle	Eastern Cape	"-33.781558, 25.425517"	Yes	Nelson Mandela Bay MM
-Brickfield	Eastern Cape	"-33.836393, 25.604166"	Yes	Nelson Mandela Bay MM
-East Bank	Eastern Cape	"-32.995815, 27.944138"	Yes	Buffalo City MM
-Mdantsane	Eastern Cape	"-32.961137, 27.765749"	Yes	Buffalo City MM
-Calvinia	Northern Cape	"-31.463965, 19.771955"	No	
-Northern	Gauteng	"-25.94510866269354, 27.994007373011183"		Johannesburg MM
+Site 	Province	Coords	Seq	Metro 
+East Bank Wastewater Treatment Works	Eastern Cape	"-32.995815, 27.944138"	Yes	Buffalo City MM
+Mdantsane Wastewater Treatment Works	Eastern Cape	"-32.961137, 27.765749"	Yes	Buffalo City MM
+Brickfield Pre-treatment Works	Eastern Cape	"-33.836393, 25.604166"	Yes	Nelson Mandela Bay MM
+Kwanobuhle Wastewater Treatment Works	Eastern Cape	"-33.781558, 25.425517"	Yes	Nelson Mandela Bay Metropolitan Municipality
+Sterkwater (Dewetsdorp Pad)	Eastern Cape	"-29.189167, 26.309444"	Yes	Nelson Mandela Bay MM
+Bloemspruit Wastewater Treatment Works	Free State	"-29.124560, 26.246714"	Yes	Mangaung MM
+Northern Wastewater Treatment Works (GP)	Gauteng	"-25.94510866269354, 27.994007373011183"	Yes	Johannesburg MM
+Goudkoppies Wastewater Treatment Works	Gauteng	"-26.271686, 27.927293"	Yes	Johannesburg MM
+Olifantsfontein	Gauteng	"-25.940844, 28.214397"	Yes	Ekurhuleni MM
+ERWAT Vlakplaat Wastewater Treatment Works	Gauteng	"-26.346639, 28.181972"	Yes	Ekurhuleni MM
+Hartebeesfontein Waterworks	Gauteng	"-26.023201, 28.285105"	Yes	Ekurhuleni MM
+Rooiwal Wastewater Treatment Works	Gauteng	"-25.558514, 28.227227"	Yes	Tshwane MM
+Daspoort Wastewater Treatment Works	Gauteng	"-25.734514, 28.177958"	Yes	Tshwane MM
+Northern Wastewater Treatment Works (KZN)	KwaZulu-Natal	"-29.795833, 30.997546"	Yes	Ethekwini MM
+Central Wastewater Treatment Works (KZN)	KwaZulu-Natal	"-29.880661, 31.057080"	Yes	Ethekwini MM
+Manguzi Wastewater Treatment Plant	KwaZulu-Natal	"-26.982978, 32.760187"	Yes	Umkhanyakude DM
+Jozini Wastewater Treatment Plant	KwaZulu-Natal	"-27.39178428718542, 32.08038560932259"	Yes	Umkhanyakude DM
+Borcherds Quarry Wastewater Treatment Works	Western Cape	"-33.961578, 18.589445"	Yes	Cape Town MM
+Zandvleit Wastewater Treatment Works	Western Cape	"-34.051707, 18.723010"	Yes	Cape Town MM
+Polokwane	Limpopo	"-23.863452, 29.443308"	No	Polokwane Local Municipality
+Musina WWTW (in town)	Limpopo	"-22.358272, 30.051462"	Yes	Vhembe DM
+Nancefield	Limpopo	"-22.325819, 30.041731"	Yes	Vhembe DM
+Komatipoort Sewage plant	Mpumalanga	"-25.426244, 31.950896"	Yes	Ehlanzeni DM
+Kingstonvale	Mpumalanga	"-25.436363832159184, 31.023050268074876"	Yes	Ehlanzeni DM
+Homevale Kimberley	Northern Cape	"-28.69220518249847, 24.753964722764405"	Yes	Sol Plaatjie Local Municipality
+Mahikeng Water Treatment Works	North West	"-25.879902, 25.650875"	Yes	Mahikeng  Local Municipality
+Mmabatho Water Treatment Works	North West	"-25.865139, 25.562372"	Yes	Mahikeng  Local Municipality
+Rustenburg Wastewater Treatment Works	North West	"-25.54671225984259, 27.296883370191924"	Yes	Rustenburg Local Municipality
+Boitekong	North West	"-25.59922956673959, 27.297415796353164"	Yes	Rustenburg Local Municipality
