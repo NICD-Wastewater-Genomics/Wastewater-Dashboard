@@ -32,6 +32,10 @@ df2_exploded = df2_exploded.reset_index(drop=True)
 
 #read in location of each wwtp
 sites = pd.read_csv('data/SA_sites_coords.tsv',sep='\t')
+
+# Remove trailing whitespace from column names
+sites.columns = sites.columns.str.strip()
+
 sites['Latitude'] = sites['Coords'].apply(lambda x:x.split(',')[0]).astype(float)
 sites['Longitude'] = sites['Coords'].apply(lambda x:x.split(',')[1]).astype(float)
 
@@ -121,8 +125,8 @@ layout = dbc.Container([
     Input("my_dropdown", "value"))
 def make_map(my_dropdown):
 
-    sites_selected = sites[sites['Metro']==my_dropdown]
-    sites_other = sites[sites['Metro']!=my_dropdown]
+    sites_selected = sites[sites['Metro']==my_dropdown].copy()
+    sites_other = sites[sites['Metro']!=my_dropdown].copy()
     dfg0 = dfg.copy()
     dfg0.loc[dfg0['province'].isin(sites_selected['Province']),'val0'] = 14
     fig_map = px.choropleth(dfg0,
