@@ -32,11 +32,6 @@ layout = dbc.Container([
             [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance", style={'color':'white'})],
             xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30,"backgroundColor":"#CFE18A"}),
     html.Div(style={'height': '15px'}),
-    html.P(id="intro", children='To monitor the levels of SARS-CoV-2 infections across South Africa,\
-        NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus fragments are\
-        excreted in stool by persons with COVID-19 and can be detected at wastewater aggregation sites.\
-        The levels of SARS-CoV-2 in wastewater reflect caseload and geographic distribution of cases,\
-        and often provide an early warning of increases in infections in the community.',style={"font-size":20}),
 html.Div(style={'height': '5px'}),
     dbc.Row([
         dbc.Col(dbc.Card(card_content1, color="primary", inverse=True)),  # inverse ensures text & card colour inverted
@@ -44,6 +39,12 @@ html.Div(style={'height': '5px'}),
         dbc.Col(dbc.Card(card_content3, color="primary", inverse=True)),
         dbc.Col(dbc.Card(card_content4, color="primary", inverse=True))
         ]),
+    html.Div(style={'height': '30px'}),  # Inserting an empty row with 50px height
+    html.P(id="intro", children='To monitor the levels of SARS-CoV-2 infections across South Africa,\
+       NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus fragments are\
+       excreted in stool by persons with COVID-19 and can be detected at wastewater aggregation sites.\
+       The levels of SARS-CoV-2 in wastewater reflect caseload and geographic distribution of cases,\
+       and often provide an early warning of increases in infections in the community.', style={"font-size": 20}),
     html.Div(style={'height': '30px'}),  # Inserting an empty row with 50px height
     html.H3(id="H3_",children=' National SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
     dbc.Row([
@@ -56,7 +57,7 @@ html.Div(style={'height': '5px'}),
         ' bioinformatic tool allows for the determination of variants in each wastewater sample.\
         Samples are aggregated across all sites, providing a national characterization of lineage prevalence.'],style={"font-size":20}),
 html.Div(style={'height': '30px'}),
-    html.H3(id="H3", children="Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
+    html.H3(id="H3", children="SARS-CoV-2 Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
     html.Div(
                 [dbc.RadioItems(
                     id="plottype",
@@ -68,7 +69,7 @@ html.Div(style={'height': '30px'}),
                         { "label": "Monthly Trends", "value": "monthly" },
                         { "label": "Smoothed Daily Trends", "value": "daily" },
                     ],
-                    value="monthly",
+                    value="daily",
                     style={ "width": "100%", "justifyContent": "flex-end" }
                 )],style={ "marginTop": 0,"marginBottom": 0}),
     html.Div([
