@@ -18,15 +18,6 @@ jobs:
         with:
           token: ${{ secrets.NICD_TOKEN }}
           
-      - name: Setup for conda
-        uses: conda-incubator/setup-miniconda@v2
-        with:        
-          auto-update-conda: true
-          channels: bioconda,conda-forge
-          channel-priority: true
-          python-version: 3.7
-          activate-environment: test
-
       - name: Checkout private tools
         uses: actions/checkout@v3
         with:
