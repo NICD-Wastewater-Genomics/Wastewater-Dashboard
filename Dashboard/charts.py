@@ -51,7 +51,7 @@ def bar_chart(df):
             mode='lines',
             line=dict(color="cornflowerblue", width=4),
             hovertemplate='%{y} copies/mL',
-            name="WW Smoothed"), 
+            name="Smoothed wastewater"),
             secondary_y=True)#,row=1,col=1)
 
     fig.update_layout(
