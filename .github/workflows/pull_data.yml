@@ -26,13 +26,19 @@ jobs:
           channel-priority: true
           python-version: 3.7
           activate-environment: test
-      
+
+      - name: Checkout private tools
+        uses: actions/checkout@v3
+        with:
+          repository: NICD-Wastewater-Genomics/NICD-Freyja-outputs-
+          token: ${{ secrets.NICD_TOKEN }}
+          path: NICD-Freyja-outputs-
+
       - name: Clone 
         shell: bash -l {0}
         run: |
             git config --global user.name "joshuailevy"
             git config --global user.email "joshua.levy16@gmail.com"
-            git clone git@github.com:NICD-Wastewater-Genomics/NICD-Freyja-outputs-.git
             cp NICD-Freyja-outputs-/scripts/NICD_daily_smoothed.csv Dashboard/data/
             cp NICD-Freyja-outputs-/scripts/NICD_monthly.csv Dashboard/data/
             cp NICD-Freyja-outputs-/scripts/color_map.json Dashboard/data/
