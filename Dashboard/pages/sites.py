@@ -10,9 +10,9 @@ from savgol import non_uniform_savgol
 
 dash.register_page(__name__)
 
-df = pd.read_csv("https://raw.githubusercontent.com/joshuailevy/NICD-Dash-Data/main/provincial_cases_vs_levels.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/provincial_cases_vs_levels.csv")
 
-df2 = pd.read_csv("https://raw.githubusercontent.com/joshuailevy/NICD-Dash-Data/main/merged_data.tsv",sep='\t',index_col=0)
+df2 = pd.read_csv("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/merged_data.tsv",sep='\t',index_col=0)
 df2['Sample'] = df2.index
 df2 = df2.rename(columns={"SampleCollectionDate":"Date","SiteProvince": "Province",
                           "DistrictName": "District","SiteName":"Site"})

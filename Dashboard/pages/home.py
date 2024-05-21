@@ -16,11 +16,11 @@ end = date.today()
 
 dash.register_page(__name__, path='/')
 
-seq_df = pd.read_csv("https://raw.githubusercontent.com/joshuailevy/NICD-Dash-Data/main/NICD_monthly.csv",index_col=0) 
+seq_df = pd.read_csv("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/NICD_monthly.csv",index_col=0) 
 #pd.read_csv("data/NICD_monthly.csv",index_col=0)
 seq_df = seq_df[seq_df.index >=start] # switch to last 12 or 24 months? 
 
-seq_df_daily = pd.read_csv("https://raw.githubusercontent.com/joshuailevy/NICD-Dash-Data/main/NICD_daily_smoothed.csv",index_col=0)
+seq_df_daily = pd.read_csv("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/NICD_daily_smoothed.csv",index_col=0)
 seq_df_daily = seq_df_daily[seq_df_daily.index >=start] # switch to last 12 or 24 months? 
 
 with open('data/color_map.json') as cdat:
