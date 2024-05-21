@@ -8,7 +8,7 @@ from savgol import non_uniform_savgol
 start = '2021-12-15'
 end = date.today()
 
-df = pd.read_csv("data/rsa_cases_vs_levels.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/joshuailevy/NICD-Dash-Data/main/rsa_cases_vs_levels.csv")
 
 epiweek = df.iloc[-1, -3]
 no_cases = df.iloc[-1, 1]
