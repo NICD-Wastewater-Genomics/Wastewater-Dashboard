@@ -1,8 +1,6 @@
 import dash
 from dash import html, dcc
 import dash_bootstrap_components as dbc
-from charts import df, bar_chart
-from cards import card_content1, card_content2, card_content3
 from navbar import create_navbar, create_footer
 
 
@@ -15,19 +13,21 @@ app = dash.Dash(__name__,
 
 server = app.server
 
-
 # coordinate page order
-app.layout = dcc.Loading(  
-    id='loading_page_content',
-    children = [
-        html.Div([
-        NAVBAR,
-        dash.page_container,
-        footer])
-        ],
-    color='primary',
-    fullscreen=True
-    )
+def serve_layout():
+    return dcc.Loading(  
+                       id='loading_page_content',
+                       children = [
+                            html.Div([
+                            NAVBAR,
+                            dash.page_container,
+                            footer])
+                            ],
+                        color='primary',
+                        fullscreen=True
+                       )
+
+app.layout = serve_layout
 
 
 if __name__ == "__main__":

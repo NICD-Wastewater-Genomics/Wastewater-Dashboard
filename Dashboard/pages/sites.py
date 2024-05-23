@@ -7,29 +7,11 @@ import plotly.graph_objects as go
 import pandas as pd
 import json
 from savgol import non_uniform_savgol
+from load_data import load_provincial_cases_levels, load_provincial_merged
 
 dash.register_page(__name__)
 
-df = pd.read_csv("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/provincial_cases_vs_levels.csv")
-
-df2 = pd.read_csv("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/merged_data.tsv",sep='\t',index_col=0)
-df2['Sample'] = df2.index
-df2 = df2.rename(columns={"SampleCollectionDate":"Date","SiteProvince": "Province",
-                          "DistrictName": "District","SiteName":"Site"})
-
-# Convert the 'lineages' column to a list of lists
-df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str) else [])
-
-# Convert the 'abundances' column to a list of lists
-df2['Abundances'] = df2['Abundances'].apply(lambda x: x.replace('[','').replace(']',''))
-df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split(',')] if isinstance(x, str) else [])
-
-# Explode the 'lineages' and 'abundances' columns to separate rows
-df2_exploded = df2.explode(['Lineages','Abundances'])
-
-# Reset the index after exploding
-df2_exploded = df2_exploded.reset_index(drop=True)
-
+# static component loading 
 #read in location of each wwtp
 sites = pd.read_csv('data/SA_sites_coords.tsv',sep='\t')
 
@@ -38,9 +20,8 @@ sites.columns = sites.columns.str.strip()
 
 sites['Latitude'] = sites['Coords'].apply(lambda x:x.split(',')[0]).astype(float)
 sites['Longitude'] = sites['Coords'].apply(lambda x:x.split(',')[1]).astype(float)
-
 sites = sites.dropna(subset=['Metro'])
-# sites['color'] = 'black'
+
 with open("data/layer1.json") as geofile:
     gjson = json.load(geofile)
 
@@ -48,7 +29,9 @@ dfg = pd.DataFrame()
 dfg['province'] = [gj['properties']['PROVINCE'] for gj in gjson['features']]
 dfg['val0'] = 0
 
-layout = dbc.Container([
+
+def sites_container():
+    return dbc.Container([
     dbc.Row(
         [dbc.Col(
             [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance(District Level)", style={'color':'white'})],
@@ -122,6 +105,8 @@ layout = dbc.Container([
 ])],
     fluid=True,style={"padding":"2em 2em 2em 0.5em"})
 
+layout = sites_container
+
 
 @callback(
     Output("map_plot", "figure"),
@@ -180,6 +165,8 @@ def make_map(my_dropdown):
     [Input("my_dropdown", "value")]
 )
 def line_chart(my_dropdown):
+
+    df = load_provincial_cases_levels()
     dff = df[(df["District"] == my_dropdown)]
     unique_sites = dff['Site'].unique() #identifying all the unique site names so we can use it in for loop and create a graph for each
     max_case = dff['n'].max()
@@ -267,6 +254,24 @@ def line_chart(my_dropdown):
 )
 
 def lineage_summary(my_dropdown):
+    df2 = load_provincial_merged()
+
+    df2['Sample'] = df2.index
+    df2 = df2.rename(columns={"SampleCollectionDate":"Date","SiteProvince": "Province",
+                              "DistrictName": "District","SiteName":"Site"})
+
+    # Convert the 'lineages' column to a list of lists
+    df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str) else [])
+
+    # Convert the 'abundances' column to a list of lists
+    df2['Abundances'] = df2['Abundances'].apply(lambda x: x.replace('[','').replace(']',''))
+    df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split(',')] if isinstance(x, str) else [])
+
+    # Explode the 'lineages' and 'abundances' columns to separate rows
+    df2_exploded = df2.explode(['Lineages','Abundances'])
+
+    # Reset the index after exploding
+    df2_exploded = df2_exploded.reset_index(drop=True)
     # global df2_exploded  # Add this line to declare df2_exploded as a global variable
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
     # for now, just do the dumb thing. Take the most abundant lineages. 
