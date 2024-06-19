@@ -1,0 +1,92 @@
+/* Default styles */
+body {
+    font-family: "Arial", sans-serif;
+}
+
+
+/* Responsive font sizes */
+@media (max-width: 576px) {
+    .card-title {
+        font-size: 1rem; /* Adjust card font size for small screens */
+    }
+    #H1 {
+        font-size: 1.5rem;
+    }
+    #intro, #seq_intro {
+        font-size: 0.9rem;
+    }
+    #H3_, #H3 {
+        font-size: 1.2rem;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+    .card-title {
+        font-size: 1.2rem; /* Adjust card font size for medium screens */
+    }
+    #H1 {
+        font-size: 2rem;
+    }
+    #intro, #seq_intro {
+        font-size: 1rem;
+    }
+    #H3_, #H3 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .card-title {
+        font-size: 1.5rem; /* Default card font size */
+    }
+    #H1 {
+        font-size: 2.5rem;
+    }
+    #intro, #seq_intro {
+        font-size: 1.2rem;
+    }
+    #H3_, #H3 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Style for content cards */
+.content-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+}
+
+/* Ensure all cards are the same height */
+.card-row .card-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+/* Ensure all cards are the same width */
+.card-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card-row .card-col {
+    flex: 1 1 22%; /* Adjust the percentage to control the width */
+    margin: 0.5rem; /* Adjust the margin for spacing between cards */
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .card-row .card-col {
+        flex: 1 1 100%; /* Full width on small screens */
+    }
+}
+
+/* Apply text justification to all <p> paragraphs */
+p {
+    text-align: justify;
+}
+
+

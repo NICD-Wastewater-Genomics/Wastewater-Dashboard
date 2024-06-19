@@ -7,8 +7,10 @@ from navbar import create_navbar, create_footer
 NAVBAR = create_navbar()
 footer = create_footer()
 
+external_stylesheets = [dbc.themes.MINTY, "/assets/style.css"]
+
 app = dash.Dash(__name__,
-                external_stylesheets=[dbc.themes.MINTY],
+                external_stylesheets=external_stylesheets,
                 use_pages=True)
 
 server = app.server
@@ -31,4 +33,5 @@ app.layout = serve_layout
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server()
+    #app.run_server(debug=False)

@@ -92,7 +92,7 @@ def bar_chart():
             name="Wastewater"),
             secondary_y=True)#,row=1,col=1)
 
-    fig.add_trace(    
+    fig.add_trace(
         go.Scatter(
             x=df_s['end'], y=df_s['ww_smoothed'],
             mode='lines',
@@ -103,20 +103,30 @@ def bar_chart():
 
     fig.update_layout(
         template='none',
-        barmode='group')
-
-    fig.update_layout(legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.02,
-        xanchor="right",
-        x=1
-    ),
+        barmode='group',
+        legend=dict(
+            orientation="h",
+            yanchor="top",
+            y=-0.2,
+            xanchor="center",
+            x=0.5
+        ),
     margin=dict(l=45, r=0, t=20, b=50))
     fig.update_xaxes(hoverformat = "%Y, Epiweek %W",)
-    fig.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False, range=[0,df['n'].max()*1.02],showgrid=False)
-    fig.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True,range=[0,df['sum_genomes'].max()*1.02])
-    fig.update_layout(width=800,hovermode="x unified", xaxis_range=[start,end]) 
+    fig.update_yaxes(title_text="Laboratory confirmed cases",
+                     secondary_y=False,
+                     range=[0,df['n'].max()*1.02],
+                     showgrid=False,
+                     automargin=True,
+                     title_standoff=20  # Add space between y-axis label and graph
+                     )
+    fig.update_yaxes(title_text="Genome Copies/ml (N Gene)",
+                     secondary_y=True,
+                     range=[0,df['sum_genomes'].max()*1.02],
+                     automargin=True,
+                     title_standoff=20  # Add space between y-axis label and graph
+                     )
+    fig.update_layout(width=800,hovermode="x unified", xaxis_range=[start,end])
     fig.update_traces(hoverinfo = 'name+y')
     # fig.update_traces(hovertemplate="%{y}")
     return fig
@@ -126,56 +136,78 @@ def bar_chart():
 def home_container():
     card_contents = get_cards()
     return dbc.Container([
-    dbc.Row(
-        [dbc.Col(
-            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance", style={'color':'white'})],
-            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30,"backgroundColor":"#CFE18A"}),
-    html.Div(style={'height': '15px'}),
-html.Div(style={'height': '5px'}),
-    dbc.Row([
-        dbc.Col(dbc.Card(card_contents[0], color="primary", inverse=True)),  # inverse ensures text & card colour inverted
-        dbc.Col(dbc.Card(card_contents[1], color="primary", inverse=True)),
-        dbc.Col(dbc.Card(card_contents[2], color="primary", inverse=True)),
-        dbc.Col(dbc.Card(card_contents[3], color="primary", inverse=True))
-        ]),
-    html.Div(style={'height': '30px'}),  # Inserting an empty row with 50px height
-    html.P(id="intro", children='To monitor the levels of SARS-CoV-2 infections across South Africa,\
-       NICD measures virus concentrations in community wastewater (sewage). SARS-CoV-2 virus fragments are\
-       excreted in stool by persons with COVID-19 and can be detected at wastewater aggregation sites.\
-       The levels of SARS-CoV-2 in wastewater reflect caseload and geographic distribution of cases,\
-       and often provide an early warning of increases in infections in the community.', style={"font-size": 20}),
-    html.Div(style={'height': '30px'}),  # Inserting an empty row with 50px height
-    html.H3(id="H3_",children=' National SARS-CoV-2 Wastewater Levels', style={"textAlign": "center",  "marginTop": 10,"marginBottom": 0}),
-    dbc.Row([
-        dcc.Graph(id="bar_plot", figure=bar_chart(), config={'displayModeBar': False})
-        ],style={"width": "85%","align-items":"center",'justify-content': 'center','margin':'auto'}),
-    html.Div(style={'height': '25px'}),  # Inserting an empty row with 50px height
-    html.P(id="seq_intro", children=['To track the evolution and spread SARS-CoV-2\
-        lineages across South Africa, wastewater virus sequencing followed by bioinformatic analyses with the ',
-        html.A("Freyja",href='https://github.com/andersen-lab/Freyja'),
-        ' bioinformatic tool allows for the determination of variants in each wastewater sample.\
-        Samples are aggregated across all sites, providing a national characterization of lineage prevalence.'],style={"font-size":20}),
-html.Div(style={'height': '30px'}),
-    html.H3(id="H3", children="SARS-CoV-2 Lineage Prevalence Observed via Wastewater",style={"textAlign": "center", "marginTop": 5,"marginBottom": 5}),
-    html.Div(
-                [dbc.RadioItems(
-                    id="plottype",
-                    className="btn-group",
-                    inputClassName="btn-check",
-                    labelClassName="btn btn-outline-primary",
-                    labelCheckedClassName="active",
-                    options=[
-                        { "label": "Monthly Trends", "value": "monthly" },
-                        { "label": "Smoothed Daily Trends", "value": "daily" },
-                    ],
-                    value="daily",
-                    style={ "width": "100%", "justifyContent": "flex-end" }
-                )],style={ "marginTop": 0,"marginBottom": 0}),
-    html.Div([
-        dcc.Graph(id="seq_graph0", config={'displayModeBar': False},style={ "width": "100%"})
-     ],style={"width": "85%","align-items":"center",'justify-content': 'center','margin':'auto'}),
-    ],fluid=True)
-
+        dbc.Row(
+            dbc.Col(
+                html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance", style={'color': 'white'}),
+                width=12
+            ),
+            style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30, "backgroundColor": "#CFE18A"}
+        ),
+        html.Div(style={'height': '15px'}),
+        dbc.Row(
+            [dbc.Col(dbc.Card(card_contents[i], color="primary", inverse=True, className="content-card"),
+                     width=12 // 4) for i in range(4)],
+            className="card-col"
+        ),
+        html.Div(style={'height': '25px'}),
+        html.P(
+            id="intro",
+            children=(
+                'To monitor the levels of SARS-CoV-2 infections across South Africa, NICD measures virus concentrations in '
+                'community wastewater (sewage). SARS-CoV-2 virus fragments are excreted in stool by persons with COVID-19 and '
+                'can be detected at wastewater aggregation sites. The levels of SARS-CoV-2 in wastewater reflect caseload and '
+                'geographic distribution of cases, and often provide an early warning of increases in infections in the community.'
+            ),
+            style={"font-size": 20}
+        ),
+        html.Div(style={'height': '25px'}),
+        html.H3(
+            id="H3_", children='National SARS-CoV-2 Wastewater Levels',
+            style={"textAlign": "center", "marginTop": 10, "marginBottom": 0}
+        ),
+        html.Div(style={'height': '15px'}),
+        dbc.Row(
+            dcc.Graph(id="bar_plot", figure=bar_chart(), config={'displayModeBar': False}),
+            style={"width": "100%", "align-items": "center", 'justify-content': 'center', 'margin': 'auto'}
+        ),
+        html.Div(style={'height': '25px'}),
+        html.P(
+            id="seq_intro",
+            children=[
+                'To track the evolution and spread of SARS-CoV-2 lineages across South Africa, wastewater virus sequencing followed by bioinformatic analyses with the ',
+                html.A("Freyja", href='https://github.com/andersen-lab/Freyja'),
+                ' bioinformatic tool allows for the determination of variants in each wastewater sample. Samples are aggregated across all sites, providing a national characterization of lineage prevalence.'
+            ],
+            style={"font-size": 20}
+        ),
+        html.Div(style={'height': '30px'}),
+        html.H3(
+            id="H3", children="SARS-CoV-2 Lineage Prevalence Observed via Wastewater",
+            style={"textAlign": "center", "marginTop": 5, "marginBottom": 5}
+        ),
+        html.Div(style={'height': '15px'}),
+        html.Div(
+            dbc.RadioItems(
+                id="plottype",
+                className="btn-group",
+                inputClassName="btn-check",
+                labelClassName="btn btn-outline-primary",
+                labelCheckedClassName="active",
+                options=[
+                    {"label": "Monthly Trends", "value": "monthly"},
+                    {"label": "Smoothed Daily Trends", "value": "daily"}
+                ],
+                value="daily",
+                style={"width": "100%", "justify-content": "flex-end"}
+            ),
+            style={"marginTop": 0, "marginBottom": 0}
+        ),
+        html.Div(style={'height': '15px'}),
+        dbc.Row(
+            dcc.Graph(id="seq_graph0", config={'displayModeBar': False}),
+            style={"width": "100%", "align-items": "center", 'justify-content': 'center', 'margin': 'auto'}
+        )
+    ], fluid=True)
 
 layout = home_container
 
@@ -187,14 +219,14 @@ def seq_plot(plottype):
     names = {'variable':'Lineage', 'index':'Month', 'value':'Prevalence'}
     if plottype=='monthly':
         seq_df = load_monthly_data()
-        seq_df = seq_df[seq_df.index >=start] # switch to last 12 or 24 months? 
+        seq_df = seq_df[seq_df.index >=start] # switch to last 12 or 24 months?
         fig2 = go.Figure(data=[go.Bar(name=sfc, x=seq_df.index, y=seq_df[sfc], marker_color=colorDict[sfc]) for sfc in seq_df.columns])
         # # Change the bar mode
         fig2.update_layout(barmode='stack',yaxis_tickformat = '.0%')
         fig2.update_layout(legend_title_text=names['variable'])
     else:
         seq_df_daily  = load_monthly_data_smoothed()
-        seq_df_daily = seq_df_daily[seq_df_daily.index >=start] # switch to last 12 or 24 months? 
+        seq_df_daily = seq_df_daily[seq_df_daily.index >=start] # switch to last 12 or 24 months?
 
         fig2 = go.Figure([go.Scatter(name=sfc,x=seq_df_daily.index, y=seq_df_daily[sfc], marker_color=colorDict[sfc],
                                       mode='lines', stackgroup='one', fillcolor=colorDict[sfc],
@@ -203,18 +235,23 @@ def seq_plot(plottype):
     fig2.update_layout(
         legend=dict(
         orientation="h",
-        yanchor="bottom",
-        y=-.35,
-        xanchor="right",
-        x=1,
+            yanchor="top",
+            y=-0.2,
+            xanchor="center",
+            x=0.5,
         font={'size':15}
     ),margin=dict(l=40, r=75, t=15, b=0))
 
     fig2.update_layout(xaxis_range=[start, end], template='none')
     # fig2.update_traces(hovertemplate = 'Lineage: %{y} <br> Month %{x}')
     fig2.update_xaxes(title_text="",hoverformat = "%b %Y")
-    fig2.update_yaxes(title_text="Lineage Prevalence",range=[0,1.01] #,tickformat='%' adding the tickformat as % does something weird to the y-axis
-                      )
+    fig2.update_yaxes(title_text="Lineage Prevalence",
+                      range=[0,1.01], #,tickformat='%' adding the tickformat as % does something weird to the y-axis
+                      automargin=True,
+                      title_standoff=20 # Add space between y-axis label and graph
+    )
     return fig2
+
+
 
 
