@@ -32,78 +32,82 @@ dfg['val0'] = 0
 
 def sites_container():
     return dbc.Container([
-    dbc.Row(
-        [dbc.Col(
-            [html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance(District Level)", style={'color':'white'})],
-            xl=12, lg=12, md=12, sm=12, xs=12)], style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30,"backgroundColor":"#CFE18A"}),
-    html.P(children='To provide regional information on SARS-CoV-2 evolution and spread, \
-        wastewater virus concentration and lineage prevalence trends can be resolved to the level of\
-        individual wastewater sampling sites. Trends observed at local community collections can help\
-        identify possible outbreaks prior to broader regional and national spread.',style={"font-size":20}),
-    html.Div(style={"backgroundColor":"#F0FFF0","padding":"1em",'border-radius': '25px'},children=[
-    html.P(id="dropdown_menu", children='Explore a district of interest',style={"font-size":25,"textAlign":"center",
-        "font-weight":"bold","color":"black"}),
-    dbc.Row([
-        dbc.Col(dcc.Dropdown(
-                id="my_dropdown",
-                options=[
-                    {'label': "Bojanala Platinum - North West", "value": "Bojanala Platinum DM"},
-                    {'label': "Buffalo City - Eastern Cape", "value": "Buffalo City MM"},
-                    {'label': "Cape Town - Western Cape", "value": "Cape Town MM"},
-                    {'label': "Ehlanzeni - Mpumalanga", "value": "Ehlanzeni DM"},
-                    {'label': "Ekurhuleni - Gauteng", "value": "Ekurhuleni MM"},
-                    {'label': "Ethekwini - KwaZulu Natal", "value": "Ethekwini MM"},
-                    {'label': "Frances Baard - Northern Cape", "value": "Frances Baard DM"},
-                    {'label': "Johannesburg - Gauteng", "value": "Johannesburg MM"},
-                    {'label': "Mangaung - Free State", "value": "Mangaung MM"},
-                    {'label': "Nelson Mandela Bay - Eastern Cape", "value": "Nelson Mandela Bay MM"},
-                    {'label': "Ngaka Modiri Molema - North West", "value": "Ngaka Modiri Molema DM"},
-                    {'label': "Tshwane - Gauteng", "value": "Tshwane MM"},
-                    {'label': "Umkhanyakude DM - KwaZulu Natal", "value": "Umkhanyakude DM"},
-                    {'label': "Vhembe - Limpopo", "value": "Vhembe DM"}
-                ],
-                value="Johannesburg MM",
-                placeholder="Select a district of interest",
-                multi=False,
-                style={'margin':'auto', 'width':'50%'}
-            ), width=10,className='justify-content-center'),
-    ],style={"align-items":"center",'justify-content': 'center'}),
-
-    html.Div(style={'height': '20px'}),  # Inserting an empty row with 50px height
-    dbc.Row([
-        dbc.Col(dbc.Card(
-            [
-                dbc.CardHeader(html.H3("Wastewater Sampling Locations",
-                                       style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
-                dbc.CardBody(dcc.Graph(id='map_plot', config={'displayModeBar': False}))
-            ],
-            body=True, outline=True, color='primary',
-        ), width=6),
-        dbc.Col(dbc.Card(
-            [
-                dbc.CardHeader(html.H3("SARS-CoV-2 Wastewater Levels",
-                                       style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
-                dbc.CardBody(dcc.Graph(id="the_graph", config={'displayModeBar': False}))
-            ],
-            body=True, outline=True, color='primary',
-        ), width=6),
-    ]),
-
-    html.Div(style={'height': '40px'}),
-
-    dbc.Row([
-        dbc.Col(dbc.Card(
-            [
-                dbc.CardHeader(html.H3("Lineage Prevalence Observed via Wastewater",
-                                       style={"textAlign": "center", "marginTop": 5, "marginBottom": 5})),
-                dbc.CardBody(dcc.Graph(id="seq_graph", config={'displayModeBar': False}))
-            ],
-            body=True, outline=True, color='primary',
-        ), width=12),
-    ]),
-    # html.Div(style={'height': '40px'}),
-])],
-    fluid=True,style={"padding":"2em 2em 2em 0.5em"})
+        dbc.Row(
+            dbc.Col(
+                html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance (District Level)",
+                        style={'color': 'white', 'textAlign': 'center'}),
+                width=12,
+                className="mb-4",
+            ),
+            style={"backgroundColor": "#CFE18A", "paddingTop": 30, "paddingBottom": 30}
+        ),
+        html.P(children='To provide regional information on SARS-CoV-2 evolution and spread, '
+                        'wastewater virus concentration and lineage prevalence trends can be resolved to the level of '
+                        'individual wastewater sampling sites. Trends observed at local community collections can help '
+                        'identify possible outbreaks prior to broader regional and national spread.',
+               style={"fontSize": 20}),
+        html.Div(style={"backgroundColor": "#F0FFF0", "padding": "1em", 'borderRadius': '25px'}, children=[
+            html.P(id="dropdown_menu", children='Explore a district of interest',
+                   style={"fontSize": 25, "textAlign": "center", "fontWeight": "bold", "color": "black"}),
+            dbc.Row(
+                dbc.Col(dcc.Dropdown(
+                    id="my_dropdown",
+                    options=[
+                        {'label': "Bojanala Platinum - North West", "value": "Bojanala Platinum DM"},
+                        {'label': "Buffalo City - Eastern Cape", "value": "Buffalo City MM"},
+                        {'label': "Cape Town - Western Cape", "value": "Cape Town MM"},
+                        {'label': "Ehlanzeni - Mpumalanga", "value": "Ehlanzeni DM"},
+                        {'label': "Ekurhuleni - Gauteng", "value": "Ekurhuleni MM"},
+                        {'label': "Ethekwini - KwaZulu Natal", "value": "Ethekwini MM"},
+                        {'label': "Frances Baard - Northern Cape", "value": "Frances Baard DM"},
+                        {'label': "Johannesburg - Gauteng", "value": "Johannesburg MM"},
+                        {'label': "Mangaung - Free State", "value": "Mangaung MM"},
+                        {'label': "Nelson Mandela Bay - Eastern Cape", "value": "Nelson Mandela Bay MM"},
+                        {'label': "Ngaka Modiri Molema - North West", "value": "Ngaka Modiri Molema DM"},
+                        {'label': "Tshwane - Gauteng", "value": "Tshwane MM"},
+                        {'label': "Umkhanyakude DM - KwaZulu Natal", "value": "Umkhanyakude DM"},
+                        {'label': "Vhembe - Limpopo", "value": "Vhembe DM"}
+                    ],
+                    value="Johannesburg MM",
+                    placeholder="Select a district of interest",
+                    multi=False,
+                    style={'margin': 'auto', 'width': '100%'}
+                ), width=10, className='justify-content-center'),
+                style={"alignItems": "center", 'justifyContent': 'center'}
+            ),
+            html.Div(style={'height': '20px'}),  # Inserting an empty row with 50px height
+            dbc.Row([
+                dbc.Col(dbc.Card(
+                    [
+                        dbc.CardHeader(html.H3("Wastewater Sampling Locations",
+                                               style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
+                        dbc.CardBody(dcc.Graph(id='map_plot', config={'displayModeBar': False}, className='responsive-graph'))
+                    ],
+                    body=True, outline=True, color='primary',
+                ), width=12, lg=6),
+                dbc.Col(dbc.Card(
+                    [
+                        dbc.CardHeader(html.H3("SARS-CoV-2 Wastewater Levels",
+                                               style={"textAlign": "center", "marginTop": 10, "marginBottom": 0})),
+                        dbc.CardBody(dcc.Graph(id="the_graph", config={'displayModeBar': False}, className='responsive-graph'))
+                    ],
+                    body=True, outline=True, color='primary',
+                ), width=12, lg=6),
+            ]),
+            html.Div(style={'height': '40px'}),
+            dbc.Row(
+                dbc.Col(dbc.Card(
+                    [
+                        dbc.CardHeader(html.H3("Lineage Prevalence Observed via Wastewater",
+                                               style={"textAlign": "center", "marginTop": 5, "marginBottom": 5})),
+                        dbc.CardBody(dcc.Graph(id="seq_graph", config={'displayModeBar': False}, className='graph-item'
+                                               ))
+                    ],
+                    body=True, outline=True, color='primary',
+                ), width=12),
+            ),
+        ]),
+    ], fluid=True, style={"padding": "2em 2em 2em 0.5em"})
 
 layout = sites_container
 
@@ -224,27 +228,20 @@ def line_chart(my_dropdown):
     fig3.update_layout(
         title=' SARS-CoV-2 Wastewater Levels',
         barmode='group',
+        margin=dict(l=20, r=20, t=40, b=80),  # Increase bottom margin
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.4,  # Move legend below the plot
+            xanchor="center",
+            x=0.5
+        )
     )
-
-    # Add black line along axes
-    fig3.update_xaxes(showline=True, linewidth=1, linecolor='black')
-    fig3.update_yaxes(showline=True, linewidth=1, linecolor='black')
-
-    fig3.update_layout(legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=-0.35,
-        xanchor="center",
-        x=0.4,
-    ),
-    margin=dict(l=20, r=20, t=40, b=20))
     fig3.update_xaxes(title_text="Epidemiological week")
-    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False,range=[0,max_case*1.02])
-    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True,range=[0,max_level*1.02])
-    # fig3.update_layout(width=800),
+    fig3.update_yaxes(title_text="Laboratory confirmed cases", secondary_y=False, range=[0, max_case * 1.02])
+    fig3.update_yaxes(title_text="Genome Copies/ml (N Gene)", secondary_y=True, range=[0, max_level * 1.02])
 
-    fig3.update_layout(paper_bgcolor='rgba(0,0,0,0)',
-                      plot_bgcolor='rgba(0,0,0,0)')
+    fig3.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
 
     return fig3
 
@@ -274,12 +271,12 @@ def lineage_summary(my_dropdown):
     df2_exploded = df2_exploded.reset_index(drop=True)
     # global df2_exploded  # Add this line to declare df2_exploded as a global variable
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
-    # for now, just do the dumb thing. Take the most abundant lineages. 
+    # for now, just do the dumb thing. Take the most abundant lineages.
     top = list(df2_exploded_filtered.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
     top.append('Other')
     df2_exploded_filtered['Lineages']  = df2_exploded_filtered['Lineages'].apply(lambda x: x if x in top else "Other")
     df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District'])['Abundances'].sum().reset_index()
-    
+
     # Define a color sequence for lineages
     with open('data/color_map.json') as cdat:
         lineage_color_map = json.load(cdat)
@@ -291,8 +288,8 @@ def lineage_summary(my_dropdown):
     # Determine the number of rows needed based on the number of unique sites
     num_rows = (len(unique_sites) + 1) // 2
 
-    #eventually we should probably use shared x axes, with 
-    fig = make_subplots(rows=num_rows, cols=2, shared_xaxes=True, shared_yaxes=False,
+    #eventually we should probably use shared x axes, with
+    fig = make_subplots(rows=num_rows, cols=2, shared_xaxes=False, shared_yaxes=False,
                         subplot_titles=unique_sites)
     cSet = []
     for i, site in enumerate(unique_sites, start=1):
@@ -347,13 +344,21 @@ def lineage_summary(my_dropdown):
         fig.update_xaxes(showline=True, linewidth=1, linecolor='black')
         fig.update_yaxes(showline=True, showgrid=True,linewidth=1, linecolor='black')
 
-    fig.update_layout(showlegend=True,
-                      legend=dict(orientation="h", yanchor="bottom", y=1.05, xanchor="center", x=0.5,font={'size':14}),
-                      height=500 * num_rows,
-                      barmode="stack",
-                      xaxis=dict(tickformat='%b %Y'),
-                      paper_bgcolor='rgba(0,0,0,0)',
-                      plot_bgcolor='rgba(0,0,0,0)',
-                      margin=dict(l=20, r=20, t=40, b=20)
-                      )
+    fig.update_layout(
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.05,
+            xanchor="center",
+            x=0.5,
+            font={'size': 20}
+        ),
+        height=500 * num_rows,
+        barmode="stack",
+        xaxis=dict(tickformat='%b %Y'),
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(l=20, r=20, t=40, b=80)
+    )
     return fig
