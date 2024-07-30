@@ -141,7 +141,7 @@ def home_container():
                 html.H1(id="H1", children="SARS-CoV-2 Wastewater Surveillance", style={'color': 'white'}),
                 width=12
             ),
-            style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30, "backgroundColor": "#CFE18A"}
+            style={"textAlign": "center", "paddingTop": 30, "paddingBottom": 30, "backgroundColor": "#A6CE39"}
         ),
         html.Div(style={'height': '15px'}),
         dbc.Row(
