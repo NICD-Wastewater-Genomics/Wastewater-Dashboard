@@ -5,7 +5,7 @@ import plotly_express as px
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import pandas as pd
-import json
+import json, urllib
 from savgol import non_uniform_savgol
 from load_data import load_provincial_cases_levels, load_provincial_merged
 
@@ -278,7 +278,7 @@ def lineage_summary(my_dropdown):
     df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District'])['Abundances'].sum().reset_index()
 
     # Define a color sequence for lineages
-    with open('data/color_map.json') as cdat:
+    with urllib.request.urlopen("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/color_map.json") as cdat:
         lineage_color_map = json.load(cdat)
     # lineage_colors = px.colors.qualitative.Set3[0:len(top)]
     # lineage_color_map = dict(zip(top, lineage_colors))

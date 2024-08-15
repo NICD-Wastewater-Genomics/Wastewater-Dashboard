@@ -3,7 +3,7 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 import pandas as pd
 from datetime import date, timedelta
-import json
+import json, urllib.request
 from dash import html, dcc, Input, Output, callback
 import plotly.graph_objects as go
 from datetime import timedelta
@@ -16,7 +16,7 @@ dash.register_page(__name__, path='/')
 start = '2021-12-15'
 end = date.today()
 
-with open('data/color_map.json') as cdat:
+with urllib.request.urlopen("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/color_map.json") as cdat:
     colorDict = json.load(cdat)
 
 def get_cards():
