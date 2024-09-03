@@ -224,6 +224,7 @@ def seq_plot(plottype):
         # # Change the bar mode
         fig2.update_layout(barmode='stack',yaxis_tickformat = '.0%')
         fig2.update_layout(legend_title_text=names['variable'])
+        fig2.update_xaxes(title_text="",hoverformat = "%b %Y")
     else:
         seq_df_daily  = load_monthly_data_smoothed()
         seq_df_daily = seq_df_daily[seq_df_daily.index >=start] # switch to last 12 or 24 months?
@@ -232,6 +233,7 @@ def seq_plot(plottype):
                                       mode='lines', stackgroup='one', fillcolor=colorDict[sfc],
                                       line=dict(width=0.0)) for sfc in seq_df_daily.columns])
         fig2.update_layout(legend_title_text=names['variable'],hovermode='x unified',hoverlabel=dict(font_size=12), yaxis_tickformat = '.0%')
+        fig2.update_xaxes(title_text="",hoverformat = "%b %d %Y")
     fig2.update_layout(
         legend=dict(
         orientation="h",
@@ -244,7 +246,6 @@ def seq_plot(plottype):
 
     fig2.update_layout(xaxis_range=[start, end], template='none')
     # fig2.update_traces(hovertemplate = 'Lineage: %{y} <br> Month %{x}')
-    fig2.update_xaxes(title_text="",hoverformat = "%b %Y")
     fig2.update_yaxes(title_text="Lineage Prevalence",
                       range=[0,1.01], #,tickformat='%' adding the tickformat as % does something weird to the y-axis
                       automargin=True,
