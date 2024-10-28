@@ -1,6 +1,7 @@
 dash
 scipy
 pandas
+pyarrow
 plotly
 plotly-express
 numpy

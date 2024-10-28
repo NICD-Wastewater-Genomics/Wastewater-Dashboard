@@ -16,7 +16,7 @@ dash.register_page(__name__, path='/')
 start = '2021-12-15'
 end = date.today()
 
-with urllib.request.urlopen("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Dash-Data/main/color_map.json") as cdat:
+with urllib.request.urlopen("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Freyja-outputs-/main/scripts/color_map.json") as cdat:
     colorDict = json.load(cdat)
 
 def get_cards():
@@ -214,7 +214,7 @@ layout = home_container
 
 @callback(
     Output("seq_graph0", "figure"),
-    Input("plottype", "value"),suppress_callback_exceptions=True)
+    Input("plottype", "value"))#,suppress_callback_exceptions=True)
 def seq_plot(plottype):
     names = {'variable':'Lineage', 'index':'Month', 'value':'Prevalence'}
     if plottype=='monthly':

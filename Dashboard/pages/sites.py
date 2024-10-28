@@ -251,25 +251,8 @@ def line_chart(my_dropdown):
 )
 
 def lineage_summary(my_dropdown):
-    df2 = load_provincial_merged()
+    df2_exploded = load_provincial_merged()
 
-    df2['Sample'] = df2.index
-    df2 = df2.rename(columns={"SampleCollectionDate":"Date","SiteProvince": "Province",
-                              "DistrictName": "District","SiteName":"Site"})
-
-    # Convert the 'lineages' column to a list of lists
-    df2['Lineages'] = df2['Lineages'].apply(lambda x: x.split() if isinstance(x, str) else [])
-
-    # Convert the 'abundances' column to a list of lists
-    df2['Abundances'] = df2['Abundances'].apply(lambda x: x.replace('[','').replace(']',''))
-    df2['Abundances'] = df2['Abundances'].apply(lambda x: [float(val) for val in x.split(',')] if isinstance(x, str) else [])
-
-    # Explode the 'lineages' and 'abundances' columns to separate rows
-    df2_exploded = df2.explode(['Lineages','Abundances'])
-
-    # Reset the index after exploding
-    df2_exploded = df2_exploded.reset_index(drop=True)
-    # global df2_exploded  # Add this line to declare df2_exploded as a global variable
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
     # for now, just do the dumb thing. Take the most abundant lineages.
     top = list(df2_exploded_filtered.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
