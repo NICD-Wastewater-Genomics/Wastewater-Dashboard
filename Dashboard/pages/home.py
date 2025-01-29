@@ -3,21 +3,17 @@ from dash import html, dcc
 import dash_bootstrap_components as dbc
 import pandas as pd
 from datetime import date, timedelta
-import json, urllib.request
 from dash import html, dcc, Input, Output, callback
 import plotly.graph_objects as go
 from datetime import timedelta
 from savgol import non_uniform_savgol
-from load_data import load_monthly_data, load_monthly_data_smoothed, load_rsa_cases_and_levels
+from load_data import load_monthly_data, load_monthly_data_smoothed, load_rsa_cases_and_levels, load_color_map
 from plotly.subplots import make_subplots
 
 dash.register_page(__name__, path='/')
 
 start = '2021-12-15'
 end = date.today()
-
-with urllib.request.urlopen("https://raw.githubusercontent.com/NICD-Wastewater-Genomics/NICD-Freyja-outputs-/main/scripts/color_map.json") as cdat:
-    colorDict = json.load(cdat)
 
 def get_cards():
     df = load_rsa_cases_and_levels()
@@ -216,6 +212,7 @@ layout = home_container
     Output("seq_graph0", "figure"),
     Input("plottype", "value"))#,suppress_callback_exceptions=True)
 def seq_plot(plottype):
+    colorDict = load_color_map()
     names = {'variable':'Lineage', 'index':'Month', 'value':'Prevalence'}
     if plottype=='monthly':
         seq_df = load_monthly_data()
