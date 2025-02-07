@@ -13,7 +13,7 @@ from plotly.subplots import make_subplots
 dash.register_page(__name__, path='/')
 
 start = '2021-12-15'
-end = date.today()
+end = date.today()+timedelta(days=5)
 
 def get_cards():
     df = load_rsa_cases_and_levels()
@@ -123,7 +123,7 @@ def bar_chart():
                      title_standoff=20  # Add space between y-axis label and graph
                      )
     fig.update_layout(width=800,hovermode="x unified", xaxis_range=[start,end])
-    fig.update_traces(hoverinfo = 'name+y')
+    fig.update_traces(hoverinfo = 'name+y',cliponaxis=False)
     # fig.update_traces(hovertemplate="%{y}")
     return fig
 
@@ -163,7 +163,7 @@ def home_container():
         ),
         html.Div(style={'height': '15px'}),
         dbc.Row(
-            dcc.Graph(id="bar_plot", figure=bar_chart(), config={'displayModeBar': False}),
+            dcc.Graph(id="bar_plot", figure=bar_chart(), config={'displayModeBar': False,'doubleClick': 'reset'}),
             style={"width": "100%", "align-items": "center", 'justify-content': 'center', 'margin': 'auto'}
         ),
         html.Div(style={'height': '25px'}),
