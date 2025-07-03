@@ -258,7 +258,7 @@ def lineage_summary(my_dropdown):
 
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
     # for now, just do the dumb thing. Take the most abundant lineages.
-    recent = df2_exploded_filtered[df2_exploded_filtered['Date']>='2025-01-01']
+    recent = df2_exploded_filtered[df2_exploded_filtered['Date']>=start0.strftime("%Y-%m-%d")]
     top = list(recent.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
     top.append('Other')
     df2_exploded_filtered['Lineages']  = df2_exploded_filtered['Lineages'].apply(lambda x: x if x in top else "Other")
