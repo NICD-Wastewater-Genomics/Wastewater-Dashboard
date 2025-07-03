@@ -251,11 +251,15 @@ def line_chart(my_dropdown):
 )
 
 def lineage_summary(my_dropdown):
+
+    from datetime import date, timedelta
+    start0 = date.today()-timedelta(days=365)
     df2_exploded = load_provincial_merged()
 
     df2_exploded_filtered = df2_exploded[df2_exploded["District"] == my_dropdown]
     # for now, just do the dumb thing. Take the most abundant lineages.
-    top = list(df2_exploded_filtered.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
+    recent = df2_exploded_filtered[df2_exploded_filtered['Date']>='2025-01-01']
+    top = list(recent.groupby('Lineages')['Abundances'].sum().sort_values(ascending=False).index[0:11])
     top.append('Other')
     df2_exploded_filtered['Lineages']  = df2_exploded_filtered['Lineages'].apply(lambda x: x if x in top else "Other")
     df2_exploded_filtered = df2_exploded_filtered.groupby(['Site','Sample','Lineages','Date','District'])['Abundances'].sum().reset_index()
@@ -284,7 +288,9 @@ def lineage_summary(my_dropdown):
         # Calculate the row and column indices for the subplot
         row_index = (i - 1) // 2 + 1
         col_index = (i - 1) % 2 + 1
-
+        if 'Hartebees' in site:
+            print(lineage_color_map)
+            print(site_df[site_df['Lineages']=='NB.1.8.1.X'])
         for lineage, color in lineage_color_map.items():
             lineage_df = site_df[site_df['Lineages'] == lineage]
             if lineage_df.shape[0]==0:
